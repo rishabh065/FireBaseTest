@@ -63,6 +63,11 @@ public class SecondActivity extends AppCompatActivity {
                             TextView text = (TextView) view.findViewById(android.R.id.text1);
                             text.setText(p.getStep());
                         }
+                        else {
+
+                            TextView text = (TextView) view.findViewById(android.R.id.text1);
+                            text.setText("");
+                        }
 
 
                         //System.out.println(p.getValue());
