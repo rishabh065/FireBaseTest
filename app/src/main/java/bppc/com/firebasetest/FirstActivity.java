@@ -1,5 +1,7 @@
 package bppc.com.firebasetest;
 
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -8,6 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.telecom.Call;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,12 +38,10 @@ public class FirstActivity extends AppCompatActivity {
      */
     ArrayList<Pojo> Category = new ArrayList<>();
     Firebase ref, ref1;
-    String iurl;
     private GoogleApiClient client;
     RecyclerView recyclerView;
     CategoryAdapter adapter1;
     RecyclerView.LayoutManager mLayoutManager;
-
 
 
     @Override
@@ -110,13 +113,23 @@ public class FirstActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+//Bhuvan
+        PhoneCallListener phoneListener = new PhoneCallListener();
+        TelephonyManager telephonyManager = (TelephonyManager) this
+                .getSystemService(Context.TELEPHONY_SERVICE);
+        telephonyManager.listen(phoneListener, PhoneStateListener.LISTEN_CALL_STATE);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         assert fab != null;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel:112"));
+                startActivity(callIntent);
             }
         });
 
@@ -243,4 +256,52 @@ public class FirstActivity extends AppCompatActivity {
         client.disconnect();
     }
 
-}
+
+        private class PhoneCallListener extends PhoneStateListener {
+
+            private boolean isPhoneCalling = false;
+
+            // String LOG_TAG = "LOGGING 123";
+
+            @Override
+            public void onCallStateChanged(int state, String incomingNumber) {
+
+                //if (TelephonyManager.CALL_STATE_RINGING == state) {
+                // phone ringing
+                //Log.i(LOG_TAG, "RINGING, number: " + incomingNumber);
+                //  }
+
+                if (TelephonyManager.CALL_STATE_OFFHOOK == state) {
+                    // active
+                    finish();
+                    //Log.i(LOG_TAG, "OFFHOOK");
+
+                    isPhoneCalling = true;
+                }
+
+                if (TelephonyManager.CALL_STATE_IDLE == state) {
+                    // run when class initial and phone call ended,
+                    // need detect flag from CALL_STATE_OFFHOOK
+                    //Log.i(LOG_TAG, "IDLE");
+
+                    if (isPhoneCalling) {
+
+                        //Log.i(LOG_TAG, "restart app");
+
+                        // restart app
+                        Intent i = getBaseContext().getPackageManager()
+                                .getLaunchIntentForPackage(
+                                        getBaseContext().getPackageName());
+                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(i);
+
+                        isPhoneCalling = false;
+                    }
+
+                }
+            }
+        }
+    }
+
+
+
