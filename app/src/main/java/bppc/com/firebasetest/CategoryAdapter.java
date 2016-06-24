@@ -1,10 +1,13 @@
 package bppc.com.firebasetest;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 
 import java.util.ArrayList;
 
@@ -14,16 +17,16 @@ import bppc.com.firebasetest.Data.PojoHolder;
 /**
  * Created by rishabh on 6/16/2016.
  */
-public class CategoryAdapter extends RecyclerView.Adapter<PojoHolder>  {
+public class CategoryAdapter extends RecyclerView.Adapter<PojoHolder> implements Filterable {
 
     Context c;
-    ArrayList<Pojo> Category;
+    ArrayList<Pojo> Category,filterList;
+    CustomFilter filter;
 
     public CategoryAdapter(Context c, ArrayList<Pojo> category) {
-
         this.c = c;
-        this.Category = category;
-
+        Category = category;
+        this.filterList = category;
     }
 
     @Override
@@ -39,6 +42,17 @@ public class CategoryAdapter extends RecyclerView.Adapter<PojoHolder>  {
         holder.setValue(Category.get(position).getValue());
         holder.setUrl(Category.get(position).getUrl());
 //        System.out.println(Category.get(position).getUrl());
+        holder.setItemClickListener(new ItemClickListener() {
+            @Override
+            public void onItemClick(View v, int pos) {
+                System.out.println(pos);
+        String s=  Category.get(pos).getValue();
+        Intent intent=new Intent(c, SecondActivity.class);
+        intent.putExtra("category",s);
+        c.startActivity(intent);
+
+            }
+        });
     }
 
     @Override
@@ -48,6 +62,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<PojoHolder>  {
     }
 
 
-
-
+    @Override
+    public Filter getFilter() {
+            filter=new CustomFilter(this,filterList);
+        return filter;
+    }
 }

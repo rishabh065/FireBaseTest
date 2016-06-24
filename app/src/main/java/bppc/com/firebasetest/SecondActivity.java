@@ -29,6 +29,7 @@ public class SecondActivity extends AppCompatActivity {
     Firebase ref;
     String category;
     TextView pressed;
+    ImageView img;
     static Context c;
     static DisplayMetrics metrics = new DisplayMetrics();
 
@@ -89,7 +90,7 @@ public class SecondActivity extends AppCompatActivity {
                 Boolean.class, R.layout.step_layout, StepHolder.class, ref.child("img")){
             protected void populateViewHolder(StepHolder viewHold, Boolean model, int position) {
                 final String key = this.getRef(position).getKey();
-                System.out.println(key);
+                //System.out.println(key);
                 final boolean val=model;
                 final StepHolder sh=viewHold;
                 ref.child("Steps").child(key).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -144,7 +145,11 @@ public class SecondActivity extends AppCompatActivity {
 //        }
         public void setImg(String url) {
             ImageView img = (ImageView) mView.findViewById(R.id.step_url);
-            Glide.with(c).load(url).override(metrics.widthPixels/2,metrics.widthPixels/2).into(img);
+            double width=metrics.widthPixels/1.25;
+            img.setMaxWidth((int)width);
+            Glide.with(c).load(url)
+                    //.override(metrics.widthPixels/2,metrics.widthPixels/2)
+                    .into(img);
         }
     }
 

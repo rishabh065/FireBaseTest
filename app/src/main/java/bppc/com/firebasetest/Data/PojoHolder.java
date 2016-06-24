@@ -1,7 +1,6 @@
 package bppc.com.firebasetest.Data;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -14,8 +13,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.ArrayList;
 
+import bppc.com.firebasetest.ItemClickListener;
 import bppc.com.firebasetest.R;
-import bppc.com.firebasetest.SecondActivity;
 
 /**
  * Created by rishabh on 6/12/2016.
@@ -24,6 +23,7 @@ public class PojoHolder extends RecyclerView.ViewHolder implements View.OnClickL
     View view;
     Context c;
     ArrayList<Pojo> category=new ArrayList<>();
+    ItemClickListener itemClickListener;
     public PojoHolder(View itemView, Context c, ArrayList<Pojo> category ) {
         super(itemView);
         view = itemView;
@@ -41,7 +41,7 @@ public class PojoHolder extends RecyclerView.ViewHolder implements View.OnClickL
     {
         ImageView img=(ImageView)view.findViewById(R.id.imgView);
         //url="http://".concat(url);
-        System.out.println(url);
+        //System.out.println(url);
         WindowManager wm = (WindowManager) c.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics metrics = new DisplayMetrics();
         wm.getDefaultDisplay().getMetrics(metrics);
@@ -55,11 +55,16 @@ public class PojoHolder extends RecyclerView.ViewHolder implements View.OnClickL
 
     @Override
     public void onClick(View v) {
-        int position= getAdapterPosition();
-        String s=  this.category.get(position).getValue();
-        Intent intent=new Intent(c, SecondActivity.class);
-        intent.putExtra("category",s);
-        c.startActivity(intent);
+//        int position= getAdapterPosition();
+//        String s=  this.category.get(position).getValue();
+//        Intent intent=new Intent(c, SecondActivity.class);
+//        intent.putExtra("category",s);
+//        c.startActivity(intent);
+        this.itemClickListener.onItemClick(v,getAdapterPosition());
+    }
+    public void setItemClickListener(ItemClickListener listener)
+    {
+        this.itemClickListener=listener;
     }
 
 

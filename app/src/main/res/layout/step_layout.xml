@@ -8,12 +8,15 @@
         android:layout_height="wrap_content"
         android:id="@+id/step_txt"
         android:textStyle="bold"
+        android:elevation="1dp"
         />
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/step_url"
         android:layout_gravity="center_horizontal"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
          />
 
 </LinearLayout>
