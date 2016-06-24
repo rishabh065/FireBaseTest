@@ -1,5 +1,6 @@
 package bppc.com.firebasetest;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -8,11 +9,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -27,8 +29,9 @@ public class SecondActivity extends AppCompatActivity {
     Firebase ref;
     String category;
     TextView pressed;
-    ImageView img;
-    ListView listView;
+    static Context c;
+    static DisplayMetrics metrics = new DisplayMetrics();
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -44,6 +47,7 @@ public class SecondActivity extends AppCompatActivity {
             Firebase.getDefaultConfig().setPersistenceEnabled(true);
         Firebase.setAndroidContext(this);
         category = getIntent().getStringExtra("category");
+        setTitle(category);
         String url = "https://project-2858820461191950748.firebaseio.com/" + category;
         ref = new Firebase(url);
         setContentView(R.layout.activity_second);
@@ -56,6 +60,7 @@ public class SecondActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.step_disp);
         mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
 //        FirebaseListAdapter<Pojoinst> adapter =
 //                new FirebaseListAdapter<Pojoinst>(
 //                        this,
@@ -81,19 +86,21 @@ public class SecondActivity extends AppCompatActivity {
 //                    }
 //                };
         FirebaseRecyclerAdapter<Boolean,StepHolder> adapter = new FirebaseRecyclerAdapter<Boolean, StepHolder>(
-                Boolean.class, android.R.layout.two_line_list_item, StepHolder.class, ref.child("img")){
+                Boolean.class, R.layout.step_layout, StepHolder.class, ref.child("img")){
             protected void populateViewHolder(StepHolder viewHold, Boolean model, int position) {
-                String key = this.getRef(position).getKey();
+                final String key = this.getRef(position).getKey();
                 System.out.println(key);
                 final boolean val=model;
                 final StepHolder sh=viewHold;
                 ref.child("Steps").child(key).addListenerForSingleValueEvent(new ValueEventListener() {
+
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         String name = dataSnapshot.child("text").getValue(String.class);
-                        sh.setInst(name);
+                        sh.setInst(key +". "+name);
                         if(val) {
                             String iurl = dataSnapshot.child("url").getValue(String.class);
-                            sh.setUrl(iurl);
+//                            sh.setImg(iurl);
+                            sh.setImg(iurl);
                         }
 
                     }
@@ -102,7 +109,7 @@ public class SecondActivity extends AppCompatActivity {
                 });
             }
         };
-
+        c= SecondActivity.this;
         recyclerView.setAdapter(adapter);
 //        img = (ImageView) findViewById(R.id.batman);
 //        String s = "https://svbtleusercontent.com/tylerhayes_24609708604080_small.png";
@@ -127,13 +134,17 @@ public class SecondActivity extends AppCompatActivity {
         }
 
         public void setInst(String name) {
-            TextView field = (TextView) mView.findViewById(android.R.id.text1);
+            TextView field = (TextView) mView.findViewById(R.id.step_txt);
             field.setText(name);
         }
 
-        public void setUrl(String text) {
-            TextView field = (TextView) mView.findViewById(android.R.id.text2);
-            field.setText(text);
+//        public void setUrl(String text) {
+//            TextView field = (TextView) mView.findViewById(android.R.id.text2);
+//            field.setText(text);
+//        }
+        public void setImg(String url) {
+            ImageView img = (ImageView) mView.findViewById(R.id.step_url);
+            Glide.with(c).load(url).override(metrics.widthPixels/2,metrics.widthPixels/2).into(img);
         }
     }
 

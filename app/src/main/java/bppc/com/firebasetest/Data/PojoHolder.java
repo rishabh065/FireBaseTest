@@ -3,7 +3,9 @@ package bppc.com.firebasetest.Data;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -40,7 +42,10 @@ public class PojoHolder extends RecyclerView.ViewHolder implements View.OnClickL
         ImageView img=(ImageView)view.findViewById(R.id.imgView);
         //url="http://".concat(url);
         System.out.println(url);
-        Glide.with(c).load(url).override(250,250).fitCenter()
+        WindowManager wm = (WindowManager) c.getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics metrics = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(metrics);
+        Glide.with(c).load(url).override(metrics.widthPixels/3,metrics.widthPixels/3)
                 .diskCacheStrategy( DiskCacheStrategy.SOURCE )
                 .into(img);
 
