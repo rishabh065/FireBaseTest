@@ -104,24 +104,41 @@ public class FirstActivity extends AppCompatActivity {
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
 
-//Bhuvan
+//Call and GPS
             PhoneCallListener phoneListener = new PhoneCallListener();
             TelephonyManager telephonyManager = (TelephonyManager) this
                     .getSystemService(Context.TELEPHONY_SERVICE);
             telephonyManager.listen(phoneListener, PhoneStateListener.LISTEN_CALL_STATE);
 
             FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-            assert fab != null;
+            if (fab != null) {
             fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-                    Intent callIntent = new Intent(Intent.ACTION_CALL);
-                    callIntent.setData(Uri.parse("tel:112"));
-                    startActivity(callIntent);
-                }
-            });
+
+         @Override
+         public void onClick(View arg0) {
+             // create class object
+             gps = new GPSTracker(FirstActivity.this);
+
+             // check if GPS enabled
+             if(gps.canGetLocation()){
+                 Intent callIntent = new Intent(Intent.ACTION_CALL);
+                 callIntent.setData(Uri.parse("tel:112"));
+                 startActivity(callIntent);
+                 double latitude = gps.getLatitude();
+                 double longitude = gps.getLongitude();
+
+                 // \n is for new line
+                 Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
+             }else{
+                 // can't get location
+                 // GPS or Network is not enabled
+                 // Ask user to enable GPS/network in settings
+                 gps.showSettingsAlert();
+             }
+
+         }
+     });
+            }
 
 
             // ATTENTION: This was auto-generated to implement the App Indexing API.
