@@ -43,6 +43,7 @@ public class FirstActivity extends AppCompatActivity {
     CategoryAdapter adapter1;
     RecyclerView.LayoutManager mLayoutManager;
     SearchView sv;
+    GPSTracker gps;
 
 
     @Override
