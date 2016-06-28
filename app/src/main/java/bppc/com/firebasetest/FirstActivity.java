@@ -47,8 +47,8 @@ public class FirstActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.onResume();
-//        LoadImages loadImages=new LoadImages(FirstActivity.this);
-//          loadImages.execute();
+        LoadImages loadImages=new LoadImages(FirstActivity.this);
+          loadImages.execute();
             if (!Firebase.getDefaultConfig().isPersistenceEnabled())
                 Firebase.getDefaultConfig().setPersistenceEnabled(true);
             Firebase.setAndroidContext(this);
