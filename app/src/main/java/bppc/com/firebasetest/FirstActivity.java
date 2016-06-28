@@ -61,6 +61,7 @@ public class FirstActivity extends AppCompatActivity {
             recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
             mLayoutManager = new GridLayoutManager(FirstActivity.this, 2);
             recyclerView.setLayoutManager(mLayoutManager);
+            recyclerView.setAdapter(adapter1);
             ref.addValueEventListener(new ValueEventListener() {
 
                 @Override
@@ -82,7 +83,6 @@ public class FirstActivity extends AppCompatActivity {
                                 pojo1.setUrl((String) dataSnapshot.getValue());
 //                            System.out.println(pojo1.getUrl());
                                 Category.add(pojo1);
-                                recyclerView.setAdapter(adapter1);
                                 adapter1.notifyDataSetChanged();
                             }
 
@@ -91,6 +91,22 @@ public class FirstActivity extends AppCompatActivity {
 
                             }
 
+                        });
+                        String string1="https://project-7104573469224225532.firebaseio.com/" + data.getKey() +"Steps";
+                        final Firebase ref2 = new Firebase(string1);
+                        ref2.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for(DataSnapshot data: dataSnapshot.getChildren())
+                                {
+
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(FirebaseError firebaseError) {
+
+                            }
                         });
                     }
                 }
@@ -127,8 +143,8 @@ public class FirstActivity extends AppCompatActivity {
             // ATTENTION: This was auto-generated to implement the App Indexing API.
             // See https://g.co/AppIndexing/AndroidStudio for more information.
             client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
-        System.out.println("Hello");
-
+        Intent i=new Intent(this,images.class);
+        this.startService(i);
     }
 
     @Override

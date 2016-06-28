@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -127,8 +128,11 @@ public class SecondActivity extends AppCompatActivity {
             double width=metrics.widthPixels/1.25;
             img.setMaxWidth((int)width);
             Glide.with(c).load(url)
-                    //.override(metrics.widthPixels/2,metrics.widthPixels/2)
+                    .fitCenter()
+//                    .resize(metrics.widthPixels/2,metrics.widthPixels/2)
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(img);
+
         }
         public void setNum(String num)
         {
