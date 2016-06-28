@@ -1,8 +1,10 @@
 package bppc.com.firebasetest;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.MenuItemCompat;
@@ -17,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -26,6 +29,11 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 
 import bppc.com.firebasetest.Data.Pojo;
@@ -42,13 +50,13 @@ public class FirstActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     CategoryAdapter adapter1;
     RecyclerView.LayoutManager mLayoutManager;
-    SearchView sv;
 
-
-    @Override
+      @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.onResume();
+//        LoadImages loadImages=new LoadImages(FirstActivity.this);
+//          loadImages.execute();
             if (!Firebase.getDefaultConfig().isPersistenceEnabled())
                 Firebase.getDefaultConfig().setPersistenceEnabled(true);
             Firebase.setAndroidContext(this);
@@ -92,22 +100,7 @@ public class FirstActivity extends AppCompatActivity {
                             }
 
                         });
-                        String string1="https://project-7104573469224225532.firebaseio.com/" + data.getKey() +"Steps";
-                        final Firebase ref2 = new Firebase(string1);
-                        ref2.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                for(DataSnapshot data: dataSnapshot.getChildren())
-                                {
 
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(FirebaseError firebaseError) {
-
-                            }
-                        });
                     }
                 }
 
@@ -119,8 +112,6 @@ public class FirstActivity extends AppCompatActivity {
 
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
-
-//Bhuvan
             PhoneCallListener phoneListener = new PhoneCallListener();
             TelephonyManager telephonyManager = (TelephonyManager) this
                     .getSystemService(Context.TELEPHONY_SERVICE);
@@ -131,20 +122,14 @@ public class FirstActivity extends AppCompatActivity {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
                     Intent callIntent = new Intent(Intent.ACTION_CALL);
                     callIntent.setData(Uri.parse("tel:112"));
                     startActivity(callIntent);
                 }
             });
-
-
             // ATTENTION: This was auto-generated to implement the App Indexing API.
             // See https://g.co/AppIndexing/AndroidStudio for more information.
             client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
-        Intent i=new Intent(this,images.class);
-        this.startService(i);
     }
 
     @Override
@@ -231,7 +216,8 @@ public class FirstActivity extends AppCompatActivity {
     }
 
 
-        private class PhoneCallListener extends PhoneStateListener {
+        private class PhoneCallListener extends PhoneStateListener
+        {
 
             private boolean isPhoneCalling = false;
 
@@ -239,11 +225,6 @@ public class FirstActivity extends AppCompatActivity {
 
             @Override
             public void onCallStateChanged(int state, String incomingNumber) {
-
-                //if (TelephonyManager.CALL_STATE_RINGING == state) {
-                // phone ringing
-                //Log.i(LOG_TAG, "RINGING, number: " + incomingNumber);
-                //  }
 
                 if (TelephonyManager.CALL_STATE_OFFHOOK == state) {
                     // active
@@ -254,14 +235,7 @@ public class FirstActivity extends AppCompatActivity {
                 }
 
                 if (TelephonyManager.CALL_STATE_IDLE == state) {
-                    // run when class initial and phone call ended,
-                    // need detect flag from CALL_STATE_OFFHOOK
-                    //Log.i(LOG_TAG, "IDLE");
                     if (isPhoneCalling) {
-
-                        //Log.i(LOG_TAG, "restart app");
-
-                        // restart app
                         Intent i = getBaseContext().getPackageManager()
                                 .getLaunchIntentForPackage(
                                         getBaseContext().getPackageName());
@@ -275,3 +249,5 @@ public class FirstActivity extends AppCompatActivity {
             }
         }
     }
+
+

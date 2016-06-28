@@ -1,6 +1,7 @@
 package bppc.com.firebasetest;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -14,8 +15,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -24,6 +23,8 @@ import com.firebase.ui.FirebaseRecyclerAdapter;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
+
+import java.io.File;
 
 public class SecondActivity extends AppCompatActivity {
 
@@ -80,7 +81,7 @@ public class SecondActivity extends AppCompatActivity {
                         if(val) {
                             String iurl = dataSnapshot.child("url").getValue(String.class);
 //                            sh.setImg(iurl);
-                            sh.setImg(iurl);
+                            sh.setImg(category,key);
                         }
 
                     }
@@ -123,16 +124,19 @@ public class SecondActivity extends AppCompatActivity {
 //            TextView field = (TextView) mView.findViewById(android.R.id.text2);
 //            field.setText(text);
 //        }
-        public void setImg(String url) {
+        public void setImg(String category,String num) {
+            ContextWrapper cw = new ContextWrapper(c);
+            File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
             ImageView img = (ImageView) mView.findViewById(R.id.step_url);
             double width=metrics.widthPixels/1.25;
             img.setMaxWidth((int)width);
-            Glide.with(c).load(url)
-                    .fitCenter()
-//                    .resize(metrics.widthPixels/2,metrics.widthPixels/2)
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .into(img);
-
+//            Glide.with(c).load(url)
+//                    .fitCenter()
+////                    .resize(metrics.widthPixels/2,metrics.widthPixels/2)
+//                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+//                    .into(img);
+            System.out.println(directory.getPath()+"/"+category+num+".jpg");
+//            img.setImageDrawable(Drawable.createFromPath(directory.getPath()+"/"+category+num+".jpg"));
         }
         public void setNum(String num)
         {
@@ -180,4 +184,5 @@ public class SecondActivity extends AppCompatActivity {
         AppIndex.AppIndexApi.end(client, viewAction);
         client.disconnect();
     }
+
 }
