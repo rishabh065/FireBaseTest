@@ -2,6 +2,7 @@ package bppc.com.firebasetest;
 
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -135,8 +136,8 @@ public class SecondActivity extends AppCompatActivity {
 ////                    .resize(metrics.widthPixels/2,metrics.widthPixels/2)
 //                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
 //                    .into(img);
-            System.out.println(directory.getPath()+"/"+category+num+".jpg");
-//            img.setImageDrawable(Drawable.createFromPath(directory.getPath()+"/"+category+num+".jpg"));
+//            System.out.println(directory.getPath()+"/"+category+num+".jpg");
+            img.setImageDrawable(Drawable.createFromPath(directory.getPath()+"/"+category+num+".jpg"));
         }
         public void setNum(String num)
         {

@@ -1,7 +1,6 @@
 package bppc.com.firebasetest;
 
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.os.AsyncTask;
 
 import com.firebase.client.DataSnapshot;
@@ -26,40 +25,16 @@ public class LoadImages extends AsyncTask<Void,Void,Void>
 {
     Context c;
 
+
     public LoadImages(Context c) {
         this.c = c;
     }
 
-    public void saveToDisk(String path,String category,String step_num)
-    {
-        int file_length=0;
-        try {
-            URL url=new URL(path);
-            URLConnection urlConnection=url.openConnection();
-            urlConnection.connect();
-            file_length=urlConnection.getContentLength();
-            ContextWrapper cw = new ContextWrapper(c);
-            File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-            File mypath=new File(directory,category+step_num+".jpg");
-            InputStream inputStream= new BufferedInputStream(url.openStream(),8192);
-            byte[] data=new byte[1024];
-            int count=0;
-            OutputStream outputStream=new FileOutputStream(mypath);
-            while ((count=inputStream.read(data))!=-1)
-            {
-                outputStream.write(data,0,count);
-            }
-            inputStream.close();
-            outputStream.close();
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
     @Override
     protected Void doInBackground(Void... params) {
+        if (!Firebase.getDefaultConfig().isPersistenceEnabled())
+            Firebase.getDefaultConfig().setPersistenceEnabled(true);
+        Firebase.setAndroidContext(c);
         Firebase ref=new Firebase("https://project-7104573469224225532.firebaseio.com/");
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -85,7 +60,34 @@ public class LoadImages extends AsyncTask<Void,Void,Void>
                                     ref3.child("url").addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
-                                            saveToDisk(dataSnapshot.getValue().toString(),tapped,step);
+                                            try {
+                                                URL url=new URL(dataSnapshot.getValue().toString());
+                                                URLConnection urlConnection=url.openConnection();
+                                                urlConnection.connect();
+                                                System.out.println("continue");
+                                                File directory = c.getDir("images", Context.MODE_PRIVATE);
+
+                                                if(directory.exists())
+                                                {
+                                                    System.out.println(directory.getPath());
+                                                }
+                                                File myPath=new File(directory,category+step+".jpg");
+                                                InputStream inputStream= new BufferedInputStream(url.openStream(),8192);
+                                                byte[] data=new byte[1024];
+                                                int count=0;
+                                                OutputStream outputStream=new FileOutputStream(myPath);
+                                                while ((count=inputStream.read(data))!=-1)
+                                                {
+                                                    outputStream.write(data,0,count);
+                                                }
+                                                inputStream.close();
+                                                outputStream.close();
+
+                                            } catch (MalformedURLException e) {
+                                                e.printStackTrace();
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
                                         }
 
                                         @Override
