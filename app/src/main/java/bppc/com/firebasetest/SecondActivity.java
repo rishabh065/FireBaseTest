@@ -62,30 +62,7 @@ public class SecondActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
-//        FirebaseListAdapter<Pojoinst> adapter =
-//                new FirebaseListAdapter<Pojoinst>(
-//                        this,
-//                        Pojoinst.class,
-//                        android.R.layout.simple_list_item_1,
-//                        ref
-//                ) {
-//                    @Override
-//                    protected void populateView(View view, Pojoinst p, int i) {
-//                        if (!p.getStep().contains("https")) {
-//
-//                            TextView text = (TextView) view.findViewById(android.R.id.text1);
-//                            text.setText(p.getStep());
-//                        }
-//                        else {
-//
-//                            TextView text = (TextView) view.findViewById(android.R.id.text1);
-//                            text.setText("");
-//                        }
-//
-//
-//                        //System.out.println(p.getValue());
-//                    }
-//                };
+
         FirebaseRecyclerAdapter<Boolean,StepHolder> adapter = new FirebaseRecyclerAdapter<Boolean, StepHolder>(
                 Boolean.class, R.layout.step_layout, StepHolder.class, ref.child("img")){
             protected void populateViewHolder(StepHolder viewHold, Boolean model, int position) {
@@ -97,7 +74,8 @@ public class SecondActivity extends AppCompatActivity {
 
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         String name = dataSnapshot.child("text").getValue(String.class);
-                        sh.setInst(key +". "+name);
+                        sh.setInst(name);
+                        sh.setNum(key);
                         if(val) {
                             String iurl = dataSnapshot.child("url").getValue(String.class);
 //                            sh.setImg(iurl);
@@ -112,6 +90,7 @@ public class SecondActivity extends AppCompatActivity {
         };
         c= SecondActivity.this;
         recyclerView.setAdapter(adapter);
+        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(this));
 //        img = (ImageView) findViewById(R.id.batman);
 //        String s = "https://svbtleusercontent.com/tylerhayes_24609708604080_small.png";
 //        Glide.with(SecondActivity.this).load(s).into(img);
@@ -150,6 +129,11 @@ public class SecondActivity extends AppCompatActivity {
             Glide.with(c).load(url)
                     //.override(metrics.widthPixels/2,metrics.widthPixels/2)
                     .into(img);
+        }
+        public void setNum(String num)
+        {
+            TextView field = (TextView) mView.findViewById(R.id.step_num);
+            field.setText(num);
         }
     }
 
