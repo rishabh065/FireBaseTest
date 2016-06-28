@@ -12,6 +12,7 @@
         android:layout_toRightOf="@+id/step_num"
         android:textSize="20sp"
         android:paddingTop="10dp"
+        android:paddingBottom="20dp"
         />
     <TextView
         android:layout_width="wrap_content"
@@ -32,7 +33,7 @@
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
         android:layout_toRightOf="@+id/step_num"
-        android:layout_below="@id/step_num"
+        android:layout_below="@id/step_txt"
          />
 
 
