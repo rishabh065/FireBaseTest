@@ -17,24 +17,61 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+
+import bppc.com.firebasetest.Data.Step_Image;
 
 /**
  * Created by rishabh on 6/29/2016.
  */
-public class LoadImages extends AsyncTask<Void,Void,Void>
+public class LoadImages extends AsyncTask<Void,Void,String>
 {
     Context c;
+    final ArrayList<Step_Image> arrayList= new ArrayList<>();
 
 
     public LoadImages(Context c) {
         this.c = c;
     }
+    public void downloadImg()
+    {
+       for (int i=0;i<arrayList.size();i++)
+        {
+            try {
+                URL url = new URL(arrayList.get(i).getUrl());
+                URLConnection urlConnection = url.openConnection();
+                urlConnection.connect();
+                System.out.println("continue");
+                File directory = c.getDir("images", Context.MODE_PRIVATE);
+
+                if (directory.exists()) {
+                    System.out.println(directory.getPath());
+                }
+                File myPath = new File(directory, arrayList.get(i).getName() + ".jpg");
+                InputStream inputStream = new BufferedInputStream(url.openStream(), 8192);
+                byte[] data = new byte[1024];
+                int count = 0;
+                OutputStream outputStream = new FileOutputStream(myPath);
+                while ((count = inputStream.read(data)) != -1) {
+                    outputStream.write(data, 0, count);
+                }
+                inputStream.close();
+                outputStream.close();
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     @Override
-    protected Void doInBackground(Void... params) {
+    protected String doInBackground(Void... params) {
         if (!Firebase.getDefaultConfig().isPersistenceEnabled())
             Firebase.getDefaultConfig().setPersistenceEnabled(true);
         Firebase.setAndroidContext(c);
+
         Firebase ref=new Firebase("https://project-7104573469224225532.firebaseio.com/");
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -60,34 +97,12 @@ public class LoadImages extends AsyncTask<Void,Void,Void>
                                     ref3.child("url").addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
-                                            try {
-                                                URL url=new URL(dataSnapshot.getValue().toString());
-                                                URLConnection urlConnection=url.openConnection();
-                                                urlConnection.connect();
-                                                System.out.println("continue");
-                                                File directory = c.getDir("images", Context.MODE_PRIVATE);
-
-                                                if(directory.exists())
-                                                {
-                                                    System.out.println(directory.getPath());
-                                                }
-                                                File myPath=new File(directory,category+step+".jpg");
-                                                InputStream inputStream= new BufferedInputStream(url.openStream(),8192);
-                                                byte[] data=new byte[1024];
-                                                int count=0;
-                                                OutputStream outputStream=new FileOutputStream(myPath);
-                                                while ((count=inputStream.read(data))!=-1)
-                                                {
-                                                    outputStream.write(data,0,count);
-                                                }
-                                                inputStream.close();
-                                                outputStream.close();
-
-                                            } catch (MalformedURLException e) {
-                                                e.printStackTrace();
-                                            } catch (IOException e) {
-                                                e.printStackTrace();
-                                            }
+                                            Step_Image si=new Step_Image();
+                                            si.setUrl(dataSnapshot.getValue().toString());
+                                            si.setName(category+step);
+                                            arrayList.add(si);
+                                            System.out.println(si.getUrl());
+                                            System.out.println(si.getName());
                                         }
 
                                         @Override
@@ -112,7 +127,13 @@ public class LoadImages extends AsyncTask<Void,Void,Void>
 
             }
         });
-        return null;
+        downloadImg();
+        return "Image Loaded";
+    }
+
+    @Override
+    protected void onPostExecute(String result) {
+        System.out.println(result);
     }
 }
 
