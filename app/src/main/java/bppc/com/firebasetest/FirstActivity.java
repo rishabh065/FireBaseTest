@@ -54,7 +54,7 @@ public class FirstActivity extends AppCompatActivity {
             Firebase.setAndroidContext(this);
             setContentView(R.layout.activity_first);
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-            ref = new Firebase("https://project-2858820461191950748.firebaseio.com/");
+            ref = new Firebase("https://project-7104573469224225532.firebaseio.com/");
             ref.keepSynced(true);
             adapter1 = new CategoryAdapter(this, Category);
 
@@ -69,7 +69,7 @@ public class FirstActivity extends AppCompatActivity {
                     for (DataSnapshot data : snapshot.getChildren()) {
                         final Pojo pojo = new Pojo();
                         pojo.setValue(data.getKey());
-                        String string = "https://project-2858820461191950748.firebaseio.com/" + data.getKey() + "/url";
+                        String string = "https://project-7104573469224225532.firebaseio.com/" + data.getKey() + "/url";
 //                    System.out.println(string);
                         ref1 = new Firebase(string);
                         ref1.addListenerForSingleValueEvent(new ValueEventListener() {

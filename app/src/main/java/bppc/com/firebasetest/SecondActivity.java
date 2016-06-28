@@ -49,7 +49,7 @@ public class SecondActivity extends AppCompatActivity {
         Firebase.setAndroidContext(this);
         category = getIntent().getStringExtra("category");
         setTitle(category);
-        String url = "https://project-2858820461191950748.firebaseio.com/" + category;
+        String url = "https://project-7104573469224225532.firebaseio.com/" + category;
         ref = new Firebase(url);
         setContentView(R.layout.activity_second);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
