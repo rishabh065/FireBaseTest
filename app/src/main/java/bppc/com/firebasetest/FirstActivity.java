@@ -29,6 +29,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import java.util.ArrayList;
 
 import bppc.com.firebasetest.Data.Pojo;
+import bppc.com.firebasetest.Data.Step_Image;
 
 public class FirstActivity extends AppCompatActivity {
 
@@ -42,13 +43,15 @@ public class FirstActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     CategoryAdapter adapter1;
     RecyclerView.LayoutManager mLayoutManager;
+    ArrayList<Step_Image> arrayList= new ArrayList<>();
+    LoadImages loadImages;
 
       @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.onResume();
-        LoadImages loadImages=new LoadImages(FirstActivity.this);
-          loadImages.execute();
+
+
             if (!Firebase.getDefaultConfig().isPersistenceEnabled())
                 Firebase.getDefaultConfig().setPersistenceEnabled(true);
             Firebase.setAndroidContext(this);
@@ -56,6 +59,7 @@ public class FirstActivity extends AppCompatActivity {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
             ref = new Firebase("https://project-7104573469224225532.firebaseio.com/");
             ref.keepSynced(true);
+            loadImages=new LoadImages(FirstActivity.this);
             adapter1 = new CategoryAdapter(this, Category);
 
             recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -122,6 +126,67 @@ public class FirstActivity extends AppCompatActivity {
             // ATTENTION: This was auto-generated to implement the App Indexing API.
             // See https://g.co/AppIndexing/AndroidStudio for more information.
             client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+          ref.addListenerForSingleValueEvent(new ValueEventListener() {
+              @Override
+              public void onDataChange(DataSnapshot dataSnapshot) {
+                  for(DataSnapshot data : dataSnapshot.getChildren())
+                  {
+                      final String tapped=data.getKey();
+                      final String category="https://project-7104573469224225532.firebaseio.com/"+data.getKey();
+                      final String url="https://project-7104573469224225532.firebaseio.com/"+data.getKey()+"/img";
+                      Firebase ref1=new Firebase(url);
+                      ref1.addListenerForSingleValueEvent(new ValueEventListener() {
+                          @Override
+                          public void onDataChange(DataSnapshot dataSnapshot)
+                          {
+                              for(DataSnapshot data : dataSnapshot.getChildren())
+                              {
+
+                                  if(data.getValue().toString().equals("true"))
+                                  {
+                                      final String step=data.getKey();
+                                      String imgurl=category+"/Steps/"+data.getKey();
+                                      Firebase ref3=new Firebase(imgurl);
+//                                      System.out.println(imgurl);
+                                      ref3.child("url").addListenerForSingleValueEvent(new ValueEventListener() {
+                                          @Override
+                                          public void  onDataChange(DataSnapshot dataSnapshot) {
+                                              Step_Image si=new Step_Image();
+                                              si.setUrl(dataSnapshot.getValue().toString());
+                                              si.setName(category+step);
+//                                              arrayList.add(si);
+                                              loadImages.addurl(si);
+                                              System.out.println(si.getUrl());
+                                              System.out.println(step);
+
+                                          }
+
+                                          @Override
+                                          public void onCancelled(FirebaseError firebaseError) {
+
+                                          }
+                                      });
+                                  }
+                              }
+                          }
+
+                          @Override
+                          public void onCancelled(FirebaseError firebaseError) {
+
+                          }
+                      });
+                  }
+
+
+              }
+
+              @Override
+              public void onCancelled(FirebaseError firebaseError) {
+
+              }
+          });
+//          System.out.println("SIZE"+arrayList.size());
+          loadImages.execute();
     }
 
     @Override
