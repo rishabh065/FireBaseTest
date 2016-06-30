@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/step_num"
-        android:textStyle="bold"
+
         android:elevation="1dp"
         android:textSize="50sp"
         android:paddingRight="10dp"
@@ -34,6 +34,7 @@
         android:scaleType="fitXY"
         android:layout_toRightOf="@+id/step_num"
         android:layout_below="@id/step_txt"
+        android:paddingBottom="10dp"
          />
 
 
