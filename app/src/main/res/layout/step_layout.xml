@@ -31,7 +31,7 @@
         android:id="@+id/step_url"
         android:layout_gravity="center_horizontal"
         android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
+        android:scaleType="fitXY"
         android:layout_toRightOf="@+id/step_num"
         android:layout_below="@id/step_txt"
          />

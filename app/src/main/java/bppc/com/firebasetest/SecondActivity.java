@@ -1,10 +1,11 @@
 package bppc.com.firebasetest;
 
 import android.content.Context;
-import android.content.ContextWrapper;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -26,6 +29,8 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class SecondActivity extends AppCompatActivity {
 
@@ -47,9 +52,15 @@ public class SecondActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!Firebase.getDefaultConfig().isPersistenceEnabled())
-            Firebase.getDefaultConfig().setPersistenceEnabled(true);
-        Firebase.setAndroidContext(this);
+        try {
+            if (!Firebase.getDefaultConfig().isPersistenceEnabled())
+                Firebase.getDefaultConfig().setPersistenceEnabled(true);
+            Firebase.setAndroidContext(this);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         category = getIntent().getStringExtra("category");
         setTitle(category);
         String url = "https://project-7104573469224225532.firebaseio.com/" + category;
@@ -82,7 +93,7 @@ public class SecondActivity extends AppCompatActivity {
                         if(val) {
                             String iurl = dataSnapshot.child("url").getValue(String.class);
 //                            sh.setImg(iurl);
-                            sh.setImg(category,key);
+                            sh.setImg(category,key,iurl);
                         }
 
                     }
@@ -94,9 +105,7 @@ public class SecondActivity extends AppCompatActivity {
         c= SecondActivity.this;
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new SimpleDividerItemDecoration(this));
-//        img = (ImageView) findViewById(R.id.batman);
-//        String s = "https://svbtleusercontent.com/tylerhayes_24609708604080_small.png";
-//        Glide.with(SecondActivity.this).load(s).into(img);
+
         ActionBar ab = getSupportActionBar();
 
         // Enable the Up button
@@ -121,23 +130,30 @@ public class SecondActivity extends AppCompatActivity {
             field.setText(name);
         }
 
-//        public void setUrl(String text) {
-//            TextView field = (TextView) mView.findViewById(android.R.id.text2);
-//            field.setText(text);
-//        }
-        public void setImg(String category,String num) {
-            ContextWrapper cw = new ContextWrapper(c);
-            File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+        public void setImg(String category,String num,String url) {
             ImageView img = (ImageView) mView.findViewById(R.id.step_url);
             double width=metrics.widthPixels/1.25;
             img.setMaxWidth((int)width);
-//            Glide.with(c).load(url)
-//                    .fitCenter()
-////                    .resize(metrics.widthPixels/2,metrics.widthPixels/2)
-//                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-//                    .into(img);
-//            System.out.println(directory.getPath()+"/"+category+num+".jpg");
-            img.setImageDrawable(Drawable.createFromPath(directory.getPath()+"/"+category+num+".jpg"));
+            try {
+                File mediaStorageDir = new File(Environment.getExternalStorageDirectory()
+                        + "/Android/data/"
+                        +c.getPackageName()
+                        + "/Files");
+                File f=new File(mediaStorageDir.getPath()+File.separator +category+num+".png");
+                Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+                img.setImageBitmap(b);
+            }
+            catch (FileNotFoundException e)
+            {
+                e.printStackTrace();
+                            Glide.with(c).load(url)
+                    .fitCenter()
+//                    .resize(metrics.widthPixels/2,metrics.widthPixels/2)
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .into(img);
+            }
+
+
         }
         public void setNum(String num)
         {
