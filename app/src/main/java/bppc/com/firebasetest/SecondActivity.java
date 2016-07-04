@@ -148,7 +148,7 @@ public class SecondActivity extends AppCompatActivity {
                 e.printStackTrace();
                             Glide.with(c).load(url)
                     .fitCenter()
-//                    .resize(metrics.widthPixels/2,metrics.widthPixels/2)
+                    .override(metrics.widthPixels/2,metrics.widthPixels/2)
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(img);
             }

@@ -34,7 +34,7 @@
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/phone"
         android:background="#31f600"
-        app:backgroundTint="#31f600" />
+        app:backgroundTint="#1c4113" />
 
 
 </android.support.design.widget.CoordinatorLayout>

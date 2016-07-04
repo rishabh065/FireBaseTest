@@ -29,7 +29,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import java.util.ArrayList;
 
 import bppc.com.firebasetest.Data.Pojo;
-import bppc.com.firebasetest.Data.Step_Image;
 
 public class FirstActivity extends AppCompatActivity {
 
@@ -43,30 +42,30 @@ public class FirstActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     CategoryAdapter adapter1;
     RecyclerView.LayoutManager mLayoutManager;
-    ArrayList<Step_Image> arrayList= new ArrayList<>();
+    SearchView sv;
+    MenuItem searchItem;
 
       @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.onResume();
             try {
-                if (!Firebase.getDefaultConfig().isPersistenceEnabled())
-                    Firebase.getDefaultConfig().setPersistenceEnabled(true);
-                Firebase.setAndroidContext(this);
+                    if (!Firebase.getDefaultConfig().isPersistenceEnabled())
+                        Firebase.getDefaultConfig().setPersistenceEnabled(true);
+                    Firebase.setAndroidContext(this);
             }
             catch(Exception e)
             {
                 e.printStackTrace();
             }
-
             setContentView(R.layout.activity_first);
-            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+//            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
             ref = new Firebase("https://project-7104573469224225532.firebaseio.com/");
             ref.keepSynced(true);
             adapter1 = new CategoryAdapter(this, Category);
 
             recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-            mLayoutManager = new GridLayoutManager(FirstActivity.this, 2);
+            mLayoutManager = new GridLayoutManager(FirstActivity.this, 1);
             recyclerView.setLayoutManager(mLayoutManager);
             recyclerView.setAdapter(adapter1);
             ref.addValueEventListener(new ValueEventListener() {
@@ -97,12 +96,9 @@ public class FirstActivity extends AppCompatActivity {
                             public void onCancelled(FirebaseError firebaseError) {
 
                             }
-
                         });
-
                     }
                 }
-
                 @Override
                 public void onCancelled(FirebaseError firebaseError) {
                 }
@@ -133,18 +129,17 @@ public class FirstActivity extends AppCompatActivity {
           Intent intent=new Intent(FirstActivity.this,images.class);
           FirstActivity.this.startService(intent);
 
-
-
-    }
+      }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_first, menu);
 
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView sv =
-                (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchItem = menu.findItem(R.id.action_search);
+        sv =(SearchView) MenuItemCompat.getActionView(searchItem);
+        sv.setQueryHint("Search...");
+//        sv.setBackgroundColor(Color.WHITE);
         sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -220,9 +215,18 @@ public class FirstActivity extends AppCompatActivity {
         client.disconnect();
     }
 
+    @Override
+    protected void onResume() {
+//        sv.setQuery("",false);
+//        sv.setIconified(false);
+        invalidateOptionsMenu();
 
-        private class PhoneCallListener extends PhoneStateListener
-        {
+        super.onResume();
+
+    }
+
+    private class PhoneCallListener extends PhoneStateListener
+    {
 
             private boolean isPhoneCalling = false;
 
@@ -252,7 +256,7 @@ public class FirstActivity extends AppCompatActivity {
 
                 }
             }
-        }
+    }
     }
 
 

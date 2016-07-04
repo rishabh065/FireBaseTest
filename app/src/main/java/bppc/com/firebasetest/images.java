@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.os.Environment;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -66,6 +67,7 @@ public class images extends Service {
                                                             storeImage(resource,category+num);
                                                         }
                                                     });
+                                            Toast.makeText(images.this, dataSnapshot.getValue().toString(), Toast.LENGTH_SHORT).show();
                                         }
 
                                         @Override
@@ -91,6 +93,8 @@ public class images extends Service {
 
             }
         });
+        Toast.makeText(images.this, "stop", Toast.LENGTH_SHORT).show();
+        stopSelf();
     }
     private void storeImage(Bitmap image,String name) {
         File pictureFile = getOutputMediaFile(name);
