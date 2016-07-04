@@ -43,25 +43,35 @@ public class FirstActivity extends AppCompatActivity {
     CategoryAdapter adapter1;
     RecyclerView.LayoutManager mLayoutManager;
     SearchView sv;
+<<<<<<< HEAD
     GPSTracker gps;
+=======
+    MenuItem searchItem;
+>>>>>>> refs/remotes/origin/prelim
 
-
-    @Override
+      @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.onResume();
-            if (!Firebase.getDefaultConfig().isPersistenceEnabled())
-                Firebase.getDefaultConfig().setPersistenceEnabled(true);
-            Firebase.setAndroidContext(this);
+            try {
+                    if (!Firebase.getDefaultConfig().isPersistenceEnabled())
+                        Firebase.getDefaultConfig().setPersistenceEnabled(true);
+                    Firebase.setAndroidContext(this);
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
             setContentView(R.layout.activity_first);
-            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-            ref = new Firebase("https://project-2858820461191950748.firebaseio.com/");
+//            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+            ref = new Firebase("https://project-7104573469224225532.firebaseio.com/");
             ref.keepSynced(true);
             adapter1 = new CategoryAdapter(this, Category);
 
             recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-            mLayoutManager = new GridLayoutManager(FirstActivity.this, 2);
+            mLayoutManager = new GridLayoutManager(FirstActivity.this, 1);
             recyclerView.setLayoutManager(mLayoutManager);
+            recyclerView.setAdapter(adapter1);
             ref.addValueEventListener(new ValueEventListener() {
 
                 @Override
@@ -70,7 +80,7 @@ public class FirstActivity extends AppCompatActivity {
                     for (DataSnapshot data : snapshot.getChildren()) {
                         final Pojo pojo = new Pojo();
                         pojo.setValue(data.getKey());
-                        String string = "https://project-2858820461191950748.firebaseio.com/" + data.getKey() + "/url";
+                        String string = "https://project-7104573469224225532.firebaseio.com/" + data.getKey() + "/url";
 //                    System.out.println(string);
                         ref1 = new Firebase(string);
                         ref1.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -83,7 +93,6 @@ public class FirstActivity extends AppCompatActivity {
                                 pojo1.setUrl((String) dataSnapshot.getValue());
 //                            System.out.println(pojo1.getUrl());
                                 Category.add(pojo1);
-                                recyclerView.setAdapter(adapter1);
                                 adapter1.notifyDataSetChanged();
                             }
 
@@ -91,11 +100,9 @@ public class FirstActivity extends AppCompatActivity {
                             public void onCancelled(FirebaseError firebaseError) {
 
                             }
-
                         });
                     }
                 }
-
                 @Override
                 public void onCancelled(FirebaseError firebaseError) {
                 }
@@ -104,8 +111,11 @@ public class FirstActivity extends AppCompatActivity {
 
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
+<<<<<<< HEAD
 
 //Call and GPS
+=======
+>>>>>>> refs/remotes/origin/prelim
             PhoneCallListener phoneListener = new PhoneCallListener();
             TelephonyManager telephonyManager = (TelephonyManager) this
                     .getSystemService(Context.TELEPHONY_SERVICE);
@@ -114,6 +124,7 @@ public class FirstActivity extends AppCompatActivity {
             FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
             if (fab != null) {
             fab.setOnClickListener(new View.OnClickListener() {
+<<<<<<< HEAD
 
          @Override
          public void onClick(View arg0) {
@@ -142,21 +153,33 @@ public class FirstActivity extends AppCompatActivity {
             }
 
 
+=======
+                @Override
+                public void onClick(View view) {
+                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+                    callIntent.setData(Uri.parse("tel:112"));
+                    startActivity(callIntent);
+                }
+            });
+>>>>>>> refs/remotes/origin/prelim
             // ATTENTION: This was auto-generated to implement the App Indexing API.
             // See https://g.co/AppIndexing/AndroidStudio for more information.
             client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
-        System.out.println("Hello");
 
-    }
+          Intent intent=new Intent(FirstActivity.this,images.class);
+          FirstActivity.this.startService(intent);
+
+      }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_first, menu);
 
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView sv =
-                (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchItem = menu.findItem(R.id.action_search);
+        sv =(SearchView) MenuItemCompat.getActionView(searchItem);
+        sv.setQueryHint("Search...");
+//        sv.setBackgroundColor(Color.WHITE);
         sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -192,7 +215,6 @@ public class FirstActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.connect();
@@ -208,6 +230,7 @@ public class FirstActivity extends AppCompatActivity {
         );
 
         AppIndex.AppIndexApi.start(client, viewAction);
+
 
 
     }
@@ -232,8 +255,18 @@ public class FirstActivity extends AppCompatActivity {
         client.disconnect();
     }
 
+    @Override
+    protected void onResume() {
+//        sv.setQuery("",false);
+//        sv.setIconified(false);
+        invalidateOptionsMenu();
 
-        private class PhoneCallListener extends PhoneStateListener {
+        super.onResume();
+
+    }
+
+    private class PhoneCallListener extends PhoneStateListener
+    {
 
             private boolean isPhoneCalling = false;
 
@@ -241,11 +274,6 @@ public class FirstActivity extends AppCompatActivity {
 
             @Override
             public void onCallStateChanged(int state, String incomingNumber) {
-
-                //if (TelephonyManager.CALL_STATE_RINGING == state) {
-                // phone ringing
-                //Log.i(LOG_TAG, "RINGING, number: " + incomingNumber);
-                //  }
 
                 if (TelephonyManager.CALL_STATE_OFFHOOK == state) {
                     // active
@@ -256,14 +284,7 @@ public class FirstActivity extends AppCompatActivity {
                 }
 
                 if (TelephonyManager.CALL_STATE_IDLE == state) {
-                    // run when class initial and phone call ended,
-                    // need detect flag from CALL_STATE_OFFHOOK
-                    //Log.i(LOG_TAG, "IDLE");
                     if (isPhoneCalling) {
-
-                        //Log.i(LOG_TAG, "restart app");
-
-                        // restart app
                         Intent i = getBaseContext().getPackageManager()
                                 .getLaunchIntentForPackage(
                                         getBaseContext().getPackageName());
@@ -275,5 +296,12 @@ public class FirstActivity extends AppCompatActivity {
 
                 }
             }
+<<<<<<< HEAD
         }
     }
+=======
+    }
+    }
+
+
+>>>>>>> refs/remotes/origin/prelim

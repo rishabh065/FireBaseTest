@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingBottom="5dp">
@@ -9,6 +9,21 @@
         android:id="@+id/step_txt"
         android:textStyle="bold"
         android:elevation="1dp"
+        android:layout_toRightOf="@+id/step_num"
+        android:textSize="20sp"
+        android:paddingTop="10dp"
+        android:paddingBottom="20dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/step_num"
+
+        android:elevation="1dp"
+        android:textSize="50sp"
+        android:paddingRight="10dp"
+        android:paddingLeft="5dp"
+        android:textColor="#ea2b25"
         />
     <ImageView
         android:layout_width="wrap_content"
@@ -16,7 +31,11 @@
         android:id="@+id/step_url"
         android:layout_gravity="center_horizontal"
         android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
+        android:scaleType="fitXY"
+        android:layout_toRightOf="@+id/step_num"
+        android:layout_below="@id/step_txt"
+        android:paddingBottom="10dp"
          />
 
-</LinearLayout>
+
+</RelativeLayout>

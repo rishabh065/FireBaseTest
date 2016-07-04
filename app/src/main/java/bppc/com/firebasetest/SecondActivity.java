@@ -1,8 +1,11 @@
 package bppc.com.firebasetest;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -23,6 +27,10 @@ import com.firebase.ui.FirebaseRecyclerAdapter;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class SecondActivity extends AppCompatActivity {
 
@@ -44,12 +52,18 @@ public class SecondActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!Firebase.getDefaultConfig().isPersistenceEnabled())
-            Firebase.getDefaultConfig().setPersistenceEnabled(true);
-        Firebase.setAndroidContext(this);
+        try {
+            if (!Firebase.getDefaultConfig().isPersistenceEnabled())
+                Firebase.getDefaultConfig().setPersistenceEnabled(true);
+            Firebase.setAndroidContext(this);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         category = getIntent().getStringExtra("category");
         setTitle(category);
-        String url = "https://project-2858820461191950748.firebaseio.com/" + category;
+        String url = "https://project-7104573469224225532.firebaseio.com/" + category;
         ref = new Firebase(url);
         setContentView(R.layout.activity_second);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -62,30 +76,7 @@ public class SecondActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
-//        FirebaseListAdapter<Pojoinst> adapter =
-//                new FirebaseListAdapter<Pojoinst>(
-//                        this,
-//                        Pojoinst.class,
-//                        android.R.layout.simple_list_item_1,
-//                        ref
-//                ) {
-//                    @Override
-//                    protected void populateView(View view, Pojoinst p, int i) {
-//                        if (!p.getStep().contains("https")) {
-//
-//                            TextView text = (TextView) view.findViewById(android.R.id.text1);
-//                            text.setText(p.getStep());
-//                        }
-//                        else {
-//
-//                            TextView text = (TextView) view.findViewById(android.R.id.text1);
-//                            text.setText("");
-//                        }
-//
-//
-//                        //System.out.println(p.getValue());
-//                    }
-//                };
+
         FirebaseRecyclerAdapter<Boolean,StepHolder> adapter = new FirebaseRecyclerAdapter<Boolean, StepHolder>(
                 Boolean.class, R.layout.step_layout, StepHolder.class, ref.child("img")){
             protected void populateViewHolder(StepHolder viewHold, Boolean model, int position) {
@@ -97,11 +88,12 @@ public class SecondActivity extends AppCompatActivity {
 
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         String name = dataSnapshot.child("text").getValue(String.class);
-                        sh.setInst(key +". "+name);
+                        sh.setInst(name);
+                        sh.setNum(key);
                         if(val) {
                             String iurl = dataSnapshot.child("url").getValue(String.class);
 //                            sh.setImg(iurl);
-                            sh.setImg(iurl);
+                            sh.setImg(category,key,iurl);
                         }
 
                     }
@@ -112,9 +104,8 @@ public class SecondActivity extends AppCompatActivity {
         };
         c= SecondActivity.this;
         recyclerView.setAdapter(adapter);
-//        img = (ImageView) findViewById(R.id.batman);
-//        String s = "https://svbtleusercontent.com/tylerhayes_24609708604080_small.png";
-//        Glide.with(SecondActivity.this).load(s).into(img);
+        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(this));
+
         ActionBar ab = getSupportActionBar();
 
         // Enable the Up button
@@ -139,17 +130,35 @@ public class SecondActivity extends AppCompatActivity {
             field.setText(name);
         }
 
-//        public void setUrl(String text) {
-//            TextView field = (TextView) mView.findViewById(android.R.id.text2);
-//            field.setText(text);
-//        }
-        public void setImg(String url) {
+        public void setImg(String category,String num,String url) {
             ImageView img = (ImageView) mView.findViewById(R.id.step_url);
             double width=metrics.widthPixels/1.25;
             img.setMaxWidth((int)width);
-            Glide.with(c).load(url)
-                    //.override(metrics.widthPixels/2,metrics.widthPixels/2)
+            try {
+                File mediaStorageDir = new File(Environment.getExternalStorageDirectory()
+                        + "/Android/data/"
+                        +c.getPackageName()
+                        + "/Files");
+                File f=new File(mediaStorageDir.getPath()+File.separator +category+num+".png");
+                Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+                img.setImageBitmap(b);
+            }
+            catch (FileNotFoundException e)
+            {
+                e.printStackTrace();
+                            Glide.with(c).load(url)
+                    .fitCenter()
+                    .override(metrics.widthPixels/2,metrics.widthPixels/2)
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(img);
+            }
+
+
+        }
+        public void setNum(String num)
+        {
+            TextView field = (TextView) mView.findViewById(R.id.step_num);
+            field.setText(num);
         }
     }
 
@@ -192,4 +201,5 @@ public class SecondActivity extends AppCompatActivity {
         AppIndex.AppIndexApi.end(client, viewAction);
         client.disconnect();
     }
+
 }
