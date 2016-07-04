@@ -16,7 +16,6 @@ import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -43,11 +42,10 @@ public class FirstActivity extends AppCompatActivity {
     CategoryAdapter adapter1;
     RecyclerView.LayoutManager mLayoutManager;
     SearchView sv;
-<<<<<<< HEAD
+
     GPSTracker gps;
-=======
+
     MenuItem searchItem;
->>>>>>> refs/remotes/origin/prelim
 
       @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,11 +109,6 @@ public class FirstActivity extends AppCompatActivity {
 
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
-<<<<<<< HEAD
-
-//Call and GPS
-=======
->>>>>>> refs/remotes/origin/prelim
             PhoneCallListener phoneListener = new PhoneCallListener();
             TelephonyManager telephonyManager = (TelephonyManager) this
                     .getSystemService(Context.TELEPHONY_SERVICE);
@@ -123,49 +116,46 @@ public class FirstActivity extends AppCompatActivity {
 
             FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
             if (fab != null) {
-            fab.setOnClickListener(new View.OnClickListener() {
-<<<<<<< HEAD
+                fab.setOnClickListener(new View.OnClickListener() {
+//<<<<<<< HEAD
+//
+//         @Override
+//         public void onClick(View arg0) {
+//             // create class object
+//             gps = new GPSTracker(FirstActivity.this);
+//
+//             // check if GPS enabled
+//             if(gps.canGetLocation()){
+//                 Intent callIntent = new Intent(Intent.ACTION_CALL);
+//                 callIntent.setData(Uri.parse("tel:112"));
+//                 startActivity(callIntent);
+//                 double latitude = gps.getLatitude();
+//                 double longitude = gps.getLongitude();
+//
+//                 // \n is for new line
+//                 Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
+//             }else{
+//                 // can't get location
+//                 // GPS or Network is not enabled
+//                 // Ask user to enable GPS/network in settings
+//                 gps.showSettingsAlert();
+//             }
+//
+//         }
+//     });
 
-         @Override
-         public void onClick(View arg0) {
-             // create class object
-             gps = new GPSTracker(FirstActivity.this);
 
-             // check if GPS enabled
-             if(gps.canGetLocation()){
-                 Intent callIntent = new Intent(Intent.ACTION_CALL);
-                 callIntent.setData(Uri.parse("tel:112"));
-                 startActivity(callIntent);
-                 double latitude = gps.getLatitude();
-                 double longitude = gps.getLongitude();
-
-                 // \n is for new line
-                 Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
-             }else{
-                 // can't get location
-                 // GPS or Network is not enabled
-                 // Ask user to enable GPS/network in settings
-                 gps.showSettingsAlert();
-             }
-
-         }
-     });
+                    @Override
+                    public void onClick(View view) {
+                        Intent callIntent = new Intent(Intent.ACTION_CALL);
+                        callIntent.setData(Uri.parse("tel:112"));
+                        startActivity(callIntent);
+                    }
+                });
+                // ATTENTION: This was auto-generated to implement the App Indexing API.
+                // See https://g.co/AppIndexing/AndroidStudio for more information.
+                client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
             }
-
-
-=======
-                @Override
-                public void onClick(View view) {
-                    Intent callIntent = new Intent(Intent.ACTION_CALL);
-                    callIntent.setData(Uri.parse("tel:112"));
-                    startActivity(callIntent);
-                }
-            });
->>>>>>> refs/remotes/origin/prelim
-            // ATTENTION: This was auto-generated to implement the App Indexing API.
-            // See https://g.co/AppIndexing/AndroidStudio for more information.
-            client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
-
           Intent intent=new Intent(FirstActivity.this,images.class);
           FirstActivity.this.startService(intent);
 
@@ -257,10 +247,7 @@ public class FirstActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-//        sv.setQuery("",false);
-//        sv.setIconified(false);
         invalidateOptionsMenu();
-
         super.onResume();
 
     }
@@ -296,12 +283,8 @@ public class FirstActivity extends AppCompatActivity {
 
                 }
             }
-<<<<<<< HEAD
         }
-    }
-=======
-    }
+
     }
 
 
->>>>>>> refs/remotes/origin/prelim
