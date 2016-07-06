@@ -48,10 +48,10 @@ public class SecondActivity extends AppCompatActivity {
     private GoogleApiClient client;
     RecyclerView recyclerView;
     RecyclerView.LayoutManager mLayoutManager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        super.onResume();
         try {
             if (!Firebase.getDefaultConfig().isPersistenceEnabled())
                 Firebase.getDefaultConfig().setPersistenceEnabled(true);
@@ -79,7 +79,7 @@ public class SecondActivity extends AppCompatActivity {
 
         FirebaseRecyclerAdapter<Boolean,StepHolder> adapter = new FirebaseRecyclerAdapter<Boolean, StepHolder>(
                 Boolean.class, R.layout.step_layout, StepHolder.class, ref.child("img")){
-            protected void populateViewHolder(StepHolder viewHold, Boolean model, int position) {
+            protected void populateViewHolder(StepHolder viewHold, Boolean model, final int position) {
                 final String key = this.getRef(position).getKey();
                 //System.out.println(key);
                 final boolean val=model;
@@ -94,17 +94,21 @@ public class SecondActivity extends AppCompatActivity {
                             String iurl = dataSnapshot.child("url").getValue(String.class);
 //                            sh.setImg(iurl);
                             sh.setImg(category,key,iurl);
+                            System.out.println(category+key);
                         }
 
                     }
 
                     public void onCancelled(FirebaseError firebaseError) { }
                 });
+                sh.setIsRecyclable(false);
             }
         };
         c= SecondActivity.this;
         recyclerView.setAdapter(adapter);
-        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(this));
+//        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(this));
+//        recyclerView.smoothScrollToPosition(adapter.getItemCount());
+        recyclerView.setHasFixedSize(true);
 
         ActionBar ab = getSupportActionBar();
 

@@ -67,7 +67,7 @@ public class images extends Service {
                                                             storeImage(resource,category+num);
                                                         }
                                                     });
-                                            Toast.makeText(images.this, dataSnapshot.getValue().toString(), Toast.LENGTH_SHORT).show();
+//                                            Toast.makeText(images.this, dataSnapshot.getValue().toString(), Toast.LENGTH_SHORT).show();
                                         }
 
                                         @Override
@@ -125,15 +125,18 @@ public class images extends Service {
         // between applications and persist after your app has been uninstalled.
 
         // Create the storage directory if it does not exist
+        System.out.println("Hello1");
         if (! mediaStorageDir.exists()){
             if (! mediaStorageDir.mkdirs()){
                 return null;
             }
         }
+        System.out.println("Hello");
         // Create a media file name
         File mediaFile;
         String mImageName=name+".png";
         mediaFile = new File(mediaStorageDir.getPath() + File.separator + mImageName);
+        System.out.println(mediaFile.getPath());
         return mediaFile;
     }
 

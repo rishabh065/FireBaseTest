@@ -22,17 +22,19 @@ public class CategoryAdapter extends RecyclerView.Adapter<PojoHolder> implements
     Context c;
     ArrayList<Pojo> Category,filterList;
     CustomFilter filter;
+    boolean layout_single;
 
-    public CategoryAdapter(Context c, ArrayList<Pojo> category) {
+    public CategoryAdapter(Context c, ArrayList<Pojo> category,boolean layout_single) {
         this.c = c;
         Category = category;
         this.filterList = category;
+        this.layout_single=layout_single;
     }
 
     @Override
     public PojoHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.card_view, parent, false);
+                .inflate(layout_single ? R.layout.card_view_single : R.layout.card_view, parent, false);
         return new PojoHolder(itemView,c,Category);
 
     }
@@ -54,7 +56,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<PojoHolder> implements
             }
         });
     }
-
+    public void setLayout_single(boolean var)
+    {
+        layout_single=var;
+    }
     @Override
     public int getItemCount() {
 //        System.out.println(Category.size());

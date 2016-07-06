@@ -45,8 +45,10 @@ public class PojoHolder extends RecyclerView.ViewHolder implements View.OnClickL
         WindowManager wm = (WindowManager) c.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics metrics = new DisplayMetrics();
         wm.getDefaultDisplay().getMetrics(metrics);
+        double width=metrics.widthPixels/2.75;
+        img.setMaxWidth((int)width);
         Glide.with(c).load(url)
-                .override(metrics.widthPixels/3,metrics.widthPixels/3)
+                .override((int)width,(int)width)
                 .diskCacheStrategy( DiskCacheStrategy.RESULT )
                 .into(img);
 
