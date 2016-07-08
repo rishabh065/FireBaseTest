@@ -1,4 +1,4 @@
-package bppc.com.firebasetest;
+package ircs.com.firstaid;
 
 import android.content.Context;
 import android.content.Intent;
@@ -28,7 +28,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
 
-import bppc.com.firebasetest.Data.Pojo;
+import ircs.com.firstaid.Data.Pojo;
 
 public class FirstActivity extends AppCompatActivity {
 
@@ -217,7 +217,9 @@ public class FirstActivity extends AppCompatActivity {
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.connect();
-        Action viewAction = Action.newAction(
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction2 = Action.newAction(
                 Action.TYPE_VIEW, // TODO: choose an action type.
                 "First Page", // TODO: Define a title for the content shown.
                 // TODO: If you have web page content that matches this app activity's content,
@@ -225,19 +227,14 @@ public class FirstActivity extends AppCompatActivity {
                 // Otherwise, set the URL to null.
                 Uri.parse("http://host/path"),
                 // TODO: Make sure this auto-generated app URL is correct.
-                Uri.parse("android-app://bppc.com.firebasetest/http/host/path")
+                Uri.parse("android-app://ircs.com.firstaid/http/host/path")
         );
-
-        AppIndex.AppIndexApi.start(client, viewAction);
-
-
-
+        AppIndex.AppIndexApi.start(client, viewAction2);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         Action viewAction = Action.newAction(
@@ -248,9 +245,12 @@ public class FirstActivity extends AppCompatActivity {
                 // Otherwise, set the URL to null.
                 Uri.parse("http://host/path"),
                 // TODO: Make sure this auto-generated app URL is correct.
-                Uri.parse("android-app://bppc.com.firebasetest/http/host/path")
+                Uri.parse("android-app://ircs.com.firstaid/http/host/path")
         );
         AppIndex.AppIndexApi.end(client, viewAction);
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.disconnect();
     }
 

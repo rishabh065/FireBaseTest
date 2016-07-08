@@ -1,4 +1,4 @@
-package bppc.com.firebasetest;
+package ircs.com.firstaid;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,8 +11,8 @@ import android.widget.Filterable;
 
 import java.util.ArrayList;
 
-import bppc.com.firebasetest.Data.Pojo;
-import bppc.com.firebasetest.Data.PojoHolder;
+import ircs.com.firstaid.Data.Pojo;
+import ircs.com.firstaid.Data.PojoHolder;
 
 /**
  * Created by rishabh on 6/16/2016.

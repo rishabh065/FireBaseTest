@@ -49,6 +49,37 @@
           "status": 2
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:686447120067:android:605b68614fe94b42",
+        "android_client_info": {
+          "package_name": "ircs.com.firstaid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "686447120067-u6fkp2f1iml9mjkl128t1rolt9j21gg2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCO23k7WQtQmw-5GVGbbP7frCMfcT_aCJw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
     }
   ],
   "configuration_version": "1"

@@ -1,4 +1,4 @@
-package bppc.com.firebasetest.Data;
+package ircs.com.firstaid.Data;
 
 import android.os.Parcel;
 import android.os.Parcelable;

@@ -1,6 +1,7 @@
-package bppc.com.firebasetest;
+package ircs.com.firstaid;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Environment;
@@ -21,8 +22,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class images extends Service {
+    ArrayList<String> url_list=new ArrayList<>();
     public images() {
 
     }
@@ -32,7 +35,9 @@ public class images extends Service {
         super.onCreate();
         Firebase.setAndroidContext(this);
         Firebase ref=new Firebase("https://project-7104573469224225532.firebaseio.com/");
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        final Context c=images.this;
+        ref.addListenerForSingleValueEvent(new ValueEventListener()
+        {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot data : dataSnapshot.getChildren())
@@ -41,9 +46,11 @@ public class images extends Service {
                     final String categoryurl="https://project-7104573469224225532.firebaseio.com/"+data.getKey();
                     final String url="https://project-7104573469224225532.firebaseio.com/"+data.getKey()+"/img";
                     Firebase ref1=new Firebase(url);
-                    ref1.addListenerForSingleValueEvent(new ValueEventListener() {
+                    ref1.addListenerForSingleValueEvent(new ValueEventListener()
+                    {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
+
                             for(DataSnapshot data : dataSnapshot.getChildren())
                             {
 
@@ -53,10 +60,12 @@ public class images extends Service {
                                     String imgurl=categoryurl+"/Steps/"+data.getKey();
                                     System.out.println(imgurl);
                                     Firebase ref3=new Firebase(imgurl);
-                                    ref3.child("url").addListenerForSingleValueEvent(new ValueEventListener() {
+                                    ref3.child("url").addListenerForSingleValueEvent(new ValueEventListener()
+                                    {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
                                             System.out.println(dataSnapshot.getValue());
+                                            images.this.url_list.add(dataSnapshot.getValue().toString());
                                             Glide
                                                     .with(getApplicationContext())
                                                     .load(dataSnapshot.getValue())
@@ -71,19 +80,16 @@ public class images extends Service {
                                         }
 
                                         @Override
-                                        public void onCancelled(FirebaseError firebaseError) {
-
-                                        }
+                                        public void onCancelled(FirebaseError firebaseError) {}
                                     });
+
                                 }
                             }
-
+                            System.out.println("mysizeisyo"+url_list.size());
                         }
 
                         @Override
-                        public void onCancelled(FirebaseError firebaseError) {
-
-                        }
+                        public void onCancelled(FirebaseError firebaseError) {}
                     });
                 }
             }
@@ -93,6 +99,7 @@ public class images extends Service {
 
             }
         });
+        System.out.println("mysizeis"+url_list.size());
         Toast.makeText(images.this, "stop", Toast.LENGTH_SHORT).show();
         stopSelf();
     }
@@ -146,6 +153,5 @@ public class images extends Service {
             // TODO: Return the communication channel to the service.
             throw new UnsupportedOperationException("Not yet implemented");
         }
-
 
 }
