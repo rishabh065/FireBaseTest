@@ -1,4 +1,4 @@
-package bppc.com.firebasetest;
+package ircs.com.firstaid;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -11,7 +11,7 @@ public class SimpleDividerItemDecoration extends RecyclerView.ItemDecoration {
     private Drawable mDivider;
 
     public SimpleDividerItemDecoration(Context context) {
-        mDivider=ContextCompat.getDrawable(context,R.drawable.line_divider);
+        mDivider=ContextCompat.getDrawable(context, R.drawable.line_divider);
 
     }
 

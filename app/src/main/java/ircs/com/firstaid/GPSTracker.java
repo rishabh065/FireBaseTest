@@ -1,4 +1,4 @@
-package bppc.com.firebasetest;
+package ircs.com.firstaid;
 
 /**
  * Created by Tushar on 25-06-2016.
@@ -176,7 +176,6 @@ public class GPSTracker extends Service implements LocationListener {
                 dialog.cancel();
             }
         });
-
         // Showing Alert Message
         alertDialog.show();
     }

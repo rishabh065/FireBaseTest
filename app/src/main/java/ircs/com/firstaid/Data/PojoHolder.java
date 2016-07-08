@@ -1,4 +1,4 @@
-package bppc.com.firebasetest.Data;
+package ircs.com.firstaid.Data;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -13,8 +13,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.ArrayList;
 
-import bppc.com.firebasetest.ItemClickListener;
-import bppc.com.firebasetest.R;
+import ircs.com.firstaid.ItemClickListener;
+import ircs.com.firstaid.R;
 
 /**
  * Created by rishabh on 6/12/2016.
@@ -45,8 +45,10 @@ public class PojoHolder extends RecyclerView.ViewHolder implements View.OnClickL
         WindowManager wm = (WindowManager) c.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics metrics = new DisplayMetrics();
         wm.getDefaultDisplay().getMetrics(metrics);
+        double width=metrics.widthPixels/2.75;
+        img.setMaxWidth((int)width);
         Glide.with(c).load(url)
-                .override(metrics.widthPixels/3,metrics.widthPixels/3)
+                .override((int)width,(int)width)
                 .diskCacheStrategy( DiskCacheStrategy.RESULT )
                 .into(img);
 

@@ -1,4 +1,4 @@
-package bppc.com.firebasetest;
+package ircs.com.firstaid;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +16,7 @@ import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -27,7 +28,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
 
-import bppc.com.firebasetest.Data.Pojo;
+import ircs.com.firstaid.Data.Pojo;
 
 public class FirstActivity extends AppCompatActivity {
 
@@ -42,11 +43,11 @@ public class FirstActivity extends AppCompatActivity {
     CategoryAdapter adapter1;
     RecyclerView.LayoutManager mLayoutManager;
     SearchView sv;
-
+    private boolean fired=false;
     GPSTracker gps;
-
+    boolean layout_single=false;
     MenuItem searchItem;
-
+    MenuItem layout_changer;
       @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,10 +65,10 @@ public class FirstActivity extends AppCompatActivity {
 //            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
             ref = new Firebase("https://project-7104573469224225532.firebaseio.com/");
             ref.keepSynced(true);
-            adapter1 = new CategoryAdapter(this, Category);
+            adapter1 = new CategoryAdapter(this, Category,layout_single);
 
             recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-            mLayoutManager = new GridLayoutManager(FirstActivity.this, 1);
+            mLayoutManager = new GridLayoutManager(FirstActivity.this, 2);
             recyclerView.setLayoutManager(mLayoutManager);
             recyclerView.setAdapter(adapter1);
             ref.addValueEventListener(new ValueEventListener() {
@@ -119,37 +120,39 @@ public class FirstActivity extends AppCompatActivity {
                 fab.setOnClickListener(new View.OnClickListener() {
 //<<<<<<< HEAD
 //
-//         @Override
-//         public void onClick(View arg0) {
-//             // create class object
-//             gps = new GPSTracker(FirstActivity.this);
-//
-//             // check if GPS enabled
-//             if(gps.canGetLocation()){
-//                 Intent callIntent = new Intent(Intent.ACTION_CALL);
-//                 callIntent.setData(Uri.parse("tel:112"));
-//                 startActivity(callIntent);
-//                 double latitude = gps.getLatitude();
-//                 double longitude = gps.getLongitude();
-//
-//                 // \n is for new line
-//                 Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
-//             }else{
-//                 // can't get location
-//                 // GPS or Network is not enabled
-//                 // Ask user to enable GPS/network in settings
-//                 gps.showSettingsAlert();
-//             }
-//
-//         }
-//     });
+         @Override
+         public void onClick(View arg0) {
+             // create class object
+             gps = new GPSTracker(FirstActivity.this);
+
+             // check if GPS enabled
+             if(gps.canGetLocation()){
+                 double latitude = gps.getLatitude();
+                 double longitude = gps.getLongitude();
+
+                 // \n is for new line
+                 Toast.makeText(getApplicationContext(),
+                         "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
+                 fired=true;
+                 Intent callIntent = new Intent(Intent.ACTION_CALL);
+                 callIntent.setData(Uri.parse("tel:112"));
+                 startActivity(callIntent);
+
+             }
+             else{
+                 // can't get location
+                 // GPS or Network is not enabled
+                 // Ask user to enable GPS/network in settings
+                 gps.showSettingsAlert();
+             }
 
 
-                    @Override
-                    public void onClick(View view) {
-                        Intent callIntent = new Intent(Intent.ACTION_CALL);
-                        callIntent.setData(Uri.parse("tel:112"));
-                        startActivity(callIntent);
+
+//                    @Override
+//                    public void onClick(View view) {
+//                        Intent callIntent = new Intent(Intent.ACTION_CALL);
+//                        callIntent.setData(Uri.parse("tel:112"));
+//                        startActivity(callIntent);
                     }
                 });
                 // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -165,7 +168,8 @@ public class FirstActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_first, menu);
-
+        layout_changer=menu.findItem(R.id.layout_select);
+        layout_changer.setIcon(layout_single ? R.drawable.grid : R.drawable.list);
         searchItem = menu.findItem(R.id.action_search);
         sv =(SearchView) MenuItemCompat.getActionView(searchItem);
         sv.setQueryHint("Search...");
@@ -195,8 +199,13 @@ public class FirstActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.layout_select) {
+            layout_single = !layout_single;
+            supportInvalidateOptionsMenu();
+            adapter1.setLayout_single(layout_single);
+            recyclerView.setLayoutManager(layout_single ? new GridLayoutManager(this, 1) : new GridLayoutManager(this, 2));
+            adapter1.notifyDataSetChanged();
+            recyclerView.setAdapter(adapter1);
         }
 
         return super.onOptionsItemSelected(item);
@@ -208,7 +217,9 @@ public class FirstActivity extends AppCompatActivity {
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.connect();
-        Action viewAction = Action.newAction(
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction2 = Action.newAction(
                 Action.TYPE_VIEW, // TODO: choose an action type.
                 "First Page", // TODO: Define a title for the content shown.
                 // TODO: If you have web page content that matches this app activity's content,
@@ -216,19 +227,14 @@ public class FirstActivity extends AppCompatActivity {
                 // Otherwise, set the URL to null.
                 Uri.parse("http://host/path"),
                 // TODO: Make sure this auto-generated app URL is correct.
-                Uri.parse("android-app://bppc.com.firebasetest/http/host/path")
+                Uri.parse("android-app://ircs.com.firstaid/http/host/path")
         );
-
-        AppIndex.AppIndexApi.start(client, viewAction);
-
-
-
+        AppIndex.AppIndexApi.start(client, viewAction2);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         Action viewAction = Action.newAction(
@@ -239,9 +245,12 @@ public class FirstActivity extends AppCompatActivity {
                 // Otherwise, set the URL to null.
                 Uri.parse("http://host/path"),
                 // TODO: Make sure this auto-generated app URL is correct.
-                Uri.parse("android-app://bppc.com.firebasetest/http/host/path")
+                Uri.parse("android-app://ircs.com.firstaid/http/host/path")
         );
         AppIndex.AppIndexApi.end(client, viewAction);
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.disconnect();
     }
 
@@ -271,14 +280,15 @@ public class FirstActivity extends AppCompatActivity {
                 }
 
                 if (TelephonyManager.CALL_STATE_IDLE == state) {
-                    if (isPhoneCalling) {
+                    if (isPhoneCalling && fired) {
                         Intent i = getBaseContext().getPackageManager()
                                 .getLaunchIntentForPackage(
                                         getBaseContext().getPackageName());
                         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(i);
-
+                        fired=false;
                         isPhoneCalling = false;
+                        Toast.makeText(FirstActivity.this, "hello", Toast.LENGTH_SHORT).show();
                     }
 
                 }

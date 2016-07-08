@@ -1,8 +1,6 @@
-package bppc.com.firebasetest;
+package ircs.com.firstaid;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -29,8 +27,6 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 public class SecondActivity extends AppCompatActivity {
 
@@ -48,10 +44,10 @@ public class SecondActivity extends AppCompatActivity {
     private GoogleApiClient client;
     RecyclerView recyclerView;
     RecyclerView.LayoutManager mLayoutManager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        super.onResume();
         try {
             if (!Firebase.getDefaultConfig().isPersistenceEnabled())
                 Firebase.getDefaultConfig().setPersistenceEnabled(true);
@@ -79,7 +75,7 @@ public class SecondActivity extends AppCompatActivity {
 
         FirebaseRecyclerAdapter<Boolean,StepHolder> adapter = new FirebaseRecyclerAdapter<Boolean, StepHolder>(
                 Boolean.class, R.layout.step_layout, StepHolder.class, ref.child("img")){
-            protected void populateViewHolder(StepHolder viewHold, Boolean model, int position) {
+            protected void populateViewHolder(StepHolder viewHold, Boolean model, final int position) {
                 final String key = this.getRef(position).getKey();
                 //System.out.println(key);
                 final boolean val=model;
@@ -92,19 +88,22 @@ public class SecondActivity extends AppCompatActivity {
                         sh.setNum(key);
                         if(val) {
                             String iurl = dataSnapshot.child("url").getValue(String.class);
-//                            sh.setImg(iurl);
                             sh.setImg(category,key,iurl);
+                            System.out.println(category+key);
                         }
 
                     }
 
                     public void onCancelled(FirebaseError firebaseError) { }
                 });
+                sh.setIsRecyclable(false);
             }
         };
         c= SecondActivity.this;
-        recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new SimpleDividerItemDecoration(this));
+        recyclerView.smoothScrollToPosition(0);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(adapter);
 
         ActionBar ab = getSupportActionBar();
 
@@ -134,24 +133,27 @@ public class SecondActivity extends AppCompatActivity {
             ImageView img = (ImageView) mView.findViewById(R.id.step_url);
             double width=metrics.widthPixels/1.25;
             img.setMaxWidth((int)width);
-            try {
+//            try {
                 File mediaStorageDir = new File(Environment.getExternalStorageDirectory()
                         + "/Android/data/"
                         +c.getPackageName()
                         + "/Files");
                 File f=new File(mediaStorageDir.getPath()+File.separator +category+num+".png");
-                Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-                img.setImageBitmap(b);
-            }
-            catch (FileNotFoundException e)
-            {
-                e.printStackTrace();
-                            Glide.with(c).load(url)
-                    .fitCenter()
-                    .override(metrics.widthPixels/2,metrics.widthPixels/2)
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .into(img);
-            }
+                Glide.with(c).
+                        load(f).
+                        asBitmap().
+                        diskCacheStrategy(DiskCacheStrategy.NONE).
+                        into(img);
+//            }
+//            catch (FileNotFoundException e)
+//            {
+//                e.printStackTrace();
+//                            Glide.with(c).load(url)
+//                    .fitCenter()
+//                    .override(metrics.widthPixels/2,metrics.widthPixels/2)
+//                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+//                    .into(img);
+//            }
 
 
         }
@@ -165,11 +167,13 @@ public class SecondActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.connect();
-        Action viewAction = Action.newAction(
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction2 = Action.newAction(
                 Action.TYPE_VIEW, // TODO: choose an action type.
                 "Second Page", // TODO: Define a title for the content shown.
                 // TODO: If you have web page content that matches this app activity's content,
@@ -177,15 +181,14 @@ public class SecondActivity extends AppCompatActivity {
                 // Otherwise, set the URL to null.
                 Uri.parse("http://host/path"),
                 // TODO: Make sure this auto-generated app URL is correct.
-                Uri.parse("android-app://bppc.com.firebasetest/http/host/path")
+                Uri.parse("android-app://ircs.com.firstaid/http/host/path")
         );
-        AppIndex.AppIndexApi.start(client, viewAction);
+        AppIndex.AppIndexApi.start(client, viewAction2);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         Action viewAction = Action.newAction(
@@ -196,10 +199,62 @@ public class SecondActivity extends AppCompatActivity {
                 // Otherwise, set the URL to null.
                 Uri.parse("http://host/path"),
                 // TODO: Make sure this auto-generated app URL is correct.
-                Uri.parse("android-app://bppc.com.firebasetest/http/host/path")
+                Uri.parse("android-app://ircs.com.firstaid/http/host/path")
         );
         AppIndex.AppIndexApi.end(client, viewAction);
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.disconnect();
     }
+//    public class NewPauseOnScrollListener extends RecyclerView.OnScrollListener {
+//
+//        private ImageLoader imageLoader;
+//
+//        private final boolean pauseOnScroll;
+//        private final boolean pauseOnSettling;
+//        private final RecyclerView.OnScrollListener externalListener;
+//
+//        public NewPauseOnScrollListener(ImageLoader imageLoader, boolean pauseOnScroll, boolean pauseOnSettling) {
+//            this(imageLoader, pauseOnScroll, pauseOnSettling, null);
+//        }
+//
+//        public NewPauseOnScrollListener(ImageLoader imageLoader, boolean pauseOnScroll, boolean pauseOnSettling,
+//                                        RecyclerView.OnScrollListener customListener) {
+//            this.imageLoader = imageLoader;
+//            this.pauseOnScroll = pauseOnScroll;
+//            this.pauseOnSettling = pauseOnSettling;
+//            externalListener = customListener;
+//        }
+//
+//        @Override
+//        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//            switch (newState) {
+//                case RecyclerView.SCROLL_STATE_IDLE:
+//                    imageLoader.resume();
+//                    break;
+//                case RecyclerView.SCROLL_STATE_DRAGGING:
+//                    if (pauseOnScroll) {
+//                        imageLoader.pause();
+//                    }
+//                    break;
+//                case RecyclerView.SCROLL_STATE_SETTLING:
+//                    if (pauseOnSettling) {
+//                        imageLoader.pause();
+//                    }
+//                    break;
+//            }
+//            if (externalListener != null) {
+//                externalListener.onScrollStateChanged(recyclerView, newState);
+//            }
+//        }
+//
+//        @Override
+//        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//            if (externalListener != null) {
+//                externalListener.onScrolled(recyclerView, dx, dy);
+//            }
+//        }
+//    }
 
 }

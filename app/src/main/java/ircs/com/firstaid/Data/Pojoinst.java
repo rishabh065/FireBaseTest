@@ -1,4 +1,4 @@
-package bppc.com.firebasetest.Data;
+package ircs.com.firstaid.Data;
 
 /**
  * Created by rishabh on 6/18/2016.

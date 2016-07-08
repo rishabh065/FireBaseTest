@@ -1,10 +1,10 @@
-package bppc.com.firebasetest;
+package ircs.com.firstaid;
 
 import android.widget.Filter;
 
 import java.util.ArrayList;
 
-import bppc.com.firebasetest.Data.Pojo;
+import ircs.com.firstaid.Data.Pojo;
 
 /**
  * Created by rishabh on 6/24/2016.
