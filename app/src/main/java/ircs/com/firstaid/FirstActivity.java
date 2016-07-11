@@ -1,8 +1,6 @@
 package ircs.com.firstaid;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.design.widget.TabLayout;
@@ -13,7 +11,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,11 +26,10 @@ public class FirstActivity extends AppCompatActivity {
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
 
-
+    ViewPagerAdapter adapter;
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private static final int PICK_CONTACT = 1234;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +50,7 @@ public class FirstActivity extends AppCompatActivity {
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new OneFragment(), "EMERGENCY");
         adapter.addFragment(new TwoFragment(), "CALL");
         adapter.addFragment(new ThreeFragment(), "HOSPITAL");
@@ -96,35 +92,7 @@ public class FirstActivity extends AppCompatActivity {
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_CONTACT) {
-            if (resultCode == RESULT_OK) {
-                Uri contactData = data.getData();
-                String number = "";
-                String name="";
-                Cursor cursor = getContentResolver().query(contactData, null, null, null, null);
-                cursor.moveToFirst();
-                String hasPhone = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.Contacts.HAS_PHONE_NUMBER));
-                String contactId = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.Contacts._ID));
-                if (hasPhone.equals("1")) {
-                    Cursor phones = getContentResolver().query
-                            (ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
-                                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID
-                                            + " = " + contactId, null, null);
-                    while (phones.moveToNext()) {
-                        number = phones.getString(phones.getColumnIndex
-                                (ContactsContract.CommonDataKinds.Phone.NUMBER)).replaceAll("[-() ]", "");
-                        name = phones.getString(phones.getColumnIndex
-                                (ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-                    }
-                    phones.close();
-                    Toast.makeText(getApplicationContext(), name+number, Toast.LENGTH_LONG).show();
-                    //Do something with number
-                } else {
-                    Toast.makeText(getApplicationContext(), "This contact has no phone number", Toast.LENGTH_LONG).show();
-                }
-                cursor.close();
-            }
-        }
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(adapter.getItem(1).getTag());
+        fragment.onActivityResult(requestCode, resultCode, data);
     }
 }

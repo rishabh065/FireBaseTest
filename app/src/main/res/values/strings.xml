@@ -4,4 +4,5 @@
     <string name="title_activity_second">SecondActivity</string>
     <string name="search_title">Search</string>
     <string name="layout_toggle">LayoutSelector</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyAVXHb-LfsTXZJ-iI5bIb84OUiMNB1cHyo</string>
 </resources>

@@ -20,5 +20,10 @@
         android:text="Add contact"
         android:id="@+id/contact_add"
         android:onClick="phonebook"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Display..."
+        android:id="@+id/check"/>
 
 </LinearLayout>

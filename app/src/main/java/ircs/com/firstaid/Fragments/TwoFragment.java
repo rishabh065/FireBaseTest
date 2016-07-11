@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import ircs.com.firstaid.GPSTracker;
@@ -28,6 +29,8 @@ public class TwoFragment extends Fragment {
     GPSTracker gps;
     private boolean fired=false;
     Button b;
+    TextView t;
+    private static final int PICK_CONTACT = 1234;
 
     public TwoFragment() {
         // Required empty public constructor
@@ -52,6 +55,7 @@ public class TwoFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_two, container, false);
         FloatingActionButton fab = (FloatingActionButton)view. findViewById(R.id.fab);
         b= (Button) view.findViewById(R.id.contact_add);
+        t= (TextView) view.findViewById(R.id.check);
         if (fab != null) {
             fab.setOnClickListener(new View.OnClickListener() {
 
@@ -129,5 +133,38 @@ public class TwoFragment extends Fragment {
             }
         }
     }
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PICK_CONTACT) {
+            if (resultCode == getActivity().RESULT_OK) {
+                Uri contactData = data.getData();
+                String number = "";
+                String name="";
+                Cursor cursor = getActivity().getContentResolver().query(contactData, null, null, null, null);
+                cursor.moveToFirst();
+                String hasPhone = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+                String contactId = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.Contacts._ID));
+                if (hasPhone.equals("1")) {
+                    Cursor phones = getActivity().getContentResolver().query
+                            (ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+                                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID
+                                            + " = " + contactId, null, null);
+                    while (phones.moveToNext()) {
+                        number = phones.getString(phones.getColumnIndex
+                                (ContactsContract.CommonDataKinds.Phone.NUMBER)).replaceAll("[-() ]", "");
+                        name = phones.getString(phones.getColumnIndex
+                                (ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                    }
+                    phones.close();
+                    Toast.makeText(getActivity().getApplicationContext(), name+number, Toast.LENGTH_LONG).show();
+                    //Do something with number
+                } else {
+                    Toast.makeText(getActivity().getApplicationContext(), "This contact has no phone number", Toast.LENGTH_LONG).show();
+                }
+                cursor.close();
+                t.setText(name+number);
+            }
+        }
+    }
 }
+
