@@ -3,16 +3,34 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="50dp">
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/common_plus_signin_btn_icon_light_focused"
-        android:background="#31f600"
-        app:backgroundTint="#31f600" />
+        android:text="Tap this button to find hospitals near you."
+        android:layout_gravity="center"
+        android:textSize="30sp"
+        android:padding="10dp"
+        android:textAlignment="center"
+        android:textStyle="italic"
+        />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:onClick="start_map"
+        android:text="Use my current location"
+        android:textAllCaps="false"
+        android:elevation="5dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:padding="10dp"
+        android:textColor="#ffffff"
+        android:textSize="20sp">
+
+    </Button>
 
 </LinearLayout>

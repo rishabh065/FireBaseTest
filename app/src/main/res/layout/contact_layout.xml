@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="3dp"
+    android:paddingLeft="15dp"
+    android:paddingTop="15dp"
+    android:paddingBottom="15dp">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/contact_name"
+        android:textStyle="bold"
+        android:text="name"
+        android:textSize="20sp"
+        android:paddingBottom="10dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/contact_name"
+        android:id="@+id/contact_num"
+        android:paddingRight="50dp"
+        android:text="number"/>
+    <LinearLayout
+        android:layout_marginRight="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/contact_num"
+        android:layout_alignParentRight="true">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/call_contact"
+        android:adjustViewBounds="true"
+        android:maxWidth="30sp"
+        android:id="@+id/call_contact"
+        android:layout_weight="1"
+        android:layout_marginRight="30dp"
+        android:clickable="true"
+        android:onClick="contact_call"
+        />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:adjustViewBounds="true"
+        android:maxWidth="30sp"
+        android:src="@drawable/delete"
+        android:clickable="true"
+        android:id="@+id/contact_del"
+        />
+    </LinearLayout>
+
+</RelativeLayout>

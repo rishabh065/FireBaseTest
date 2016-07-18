@@ -4,26 +4,26 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
+        android:layout_gravity="top|end"
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/call"
-        android:background="#31f600"
-        app:backgroundTint="#31f600" />
+        app:backgroundTint="#006a4e"
+        />
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/list_view"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add contact"
+        android:text="Add favourite"
         android:id="@+id/contact_add"
-        android:onClick="phonebook"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="Display..."
-        android:id="@+id/check"/>
+        android:clickable="true"
+        android:layout_gravity="center_horizontal"/>
+
 
 </LinearLayout>

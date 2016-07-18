@@ -79,6 +79,8 @@ public class OneFragment extends Fragment {
                 Category.clear();
                 for (DataSnapshot data : snapshot.getChildren()) {
                     final Pojo pojo = new Pojo();
+                    if(data.getKey().equals("zzzzzz"))
+                        continue;
                     pojo.setValue(data.getKey());
                     String string = "https://project-7104573469224225532.firebaseio.com/" + data.getKey() + "/url";
 //                    System.out.println(string);
@@ -93,8 +95,13 @@ public class OneFragment extends Fragment {
                             pojo1.setUrl((String) dataSnapshot.getValue());
 //                            System.out.println(pojo1.getUrl());
                             Category.add(pojo1);
-                            recyclerView.setAdapter(adapter1);
-                            adapter1.notifyDataSetChanged();
+                            try {
+                                recyclerView.setAdapter(adapter1);
+                                adapter1.notifyDataSetChanged();
+                            }
+                            catch(Exception e){
+
+                            }
                         }
 
                         @Override
@@ -111,7 +118,6 @@ public class OneFragment extends Fragment {
             }
         });
         client = new GoogleApiClient.Builder(getActivity()).addApi(AppIndex.API).build();
-        System.out.println("Hello");
 
 //        Intent intent=new Intent(getActivity(),images.class);
 //        getActivity().startService(intent);

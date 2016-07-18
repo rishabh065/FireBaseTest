@@ -1,12 +1,9 @@
 package ircs.com.firstaid.Fragments;
 
 /**
- * Created by Tushar on 03-07-2016.
+ * Created by rishabh on 7/15/2016.
  */
-
-
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +12,9 @@ import android.view.ViewGroup;
 import ircs.com.firstaid.R;
 
 
-public class ThreeFragment extends Fragment{
+public class FourFragment extends Fragment{
     private final String TAG = getClass().getSimpleName();
-    public ThreeFragment() {
+    public FourFragment() {
         // Required empty public constructor
     }
 
@@ -31,8 +28,7 @@ public class ThreeFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View view = inflater.inflate(R.layout.fragment_three, container, false);
-        FloatingActionButton fab = (FloatingActionButton)view. findViewById(R.id.fab);
+        final View view = inflater.inflate(R.layout.fragment_four, container, false);
         return view;
     }
 }

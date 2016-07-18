@@ -2,6 +2,7 @@ package ircs.com.firstaid.Fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,10 +15,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import ircs.com.firstaid.GPSTracker;
+import java.util.ArrayList;
+
+import ircs.com.firstaid.Data.Contacts;
+import ircs.com.firstaid.Data.CustomAdapter;
 import ircs.com.firstaid.R;
 
 /**
@@ -26,11 +31,15 @@ import ircs.com.firstaid.R;
 
 
 public class TwoFragment extends Fragment {
-    GPSTracker gps;
     private boolean fired=false;
     Button b;
     TextView t;
+    ArrayList<Contacts> contacts=new ArrayList<>();
+    CustomAdapter adapter;
+    ListView listView;
+    SharedPreferences list_contents;
     private static final int PICK_CONTACT = 1234;
+    private static final String SHARED_PREFS_NAME = "MY_SHARED_PREF";
 
     public TwoFragment() {
         // Required empty public constructor
@@ -43,9 +52,18 @@ public class TwoFragment extends Fragment {
         TelephonyManager telephonyManager = (TelephonyManager) getActivity().
                 getSystemService(Context.TELEPHONY_SERVICE);
         telephonyManager.listen(phoneListener, PhoneStateListener.LISTEN_CALL_STATE);
-
-
-
+        list_contents = getActivity().getSharedPreferences(SHARED_PREFS_NAME, 0);
+        int num=list_contents.getInt("Number",0);
+        for(int i=1;i<=num;i++)
+        {
+            String name=list_contents.getString("name"+i,null);
+            String number=list_contents.getString("num"+i,null);
+            Contacts c=new Contacts();
+            c.setNumber(number);
+            c.setName(name);
+            contacts.add(c);
+        }
+        adapter=new CustomAdapter(getActivity(),contacts);
     }
 
     @Override
@@ -55,37 +73,36 @@ public class TwoFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_two, container, false);
         FloatingActionButton fab = (FloatingActionButton)view. findViewById(R.id.fab);
         b= (Button) view.findViewById(R.id.contact_add);
-        t= (TextView) view.findViewById(R.id.check);
         if (fab != null) {
             fab.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View arg0) {
-                    // create class object
-                    gps = new GPSTracker(getActivity());
 
-                    // check if GPS enabled
-                    if(gps.canGetLocation()){
                         fired=true;
                         Intent callIntent = new Intent(Intent.ACTION_CALL);
                         callIntent.setData(Uri.parse("tel:112"));
                         startActivity(callIntent);
-                        double latitude = gps.getLatitude();
-                        double longitude = gps.getLongitude();
-                        // \n is for new line
-                        Toast.makeText(getActivity().getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
-                    }
-                    else{
-                        // can't get location
-                        // GPS or Network is not enabled
-                        // Ask user to enable GPS/network in settings
-                        gps.showSettingsAlert();
-                    }
 
                 }
             });
         }
-        return  view;
+        listView= (ListView) view.findViewById(R.id.list_view);
+        listView.setAdapter(adapter);
+        Button b= (Button) view.findViewById(R.id.contact_add);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(contacts.size()>=3)
+                    Toast.makeText(getActivity().getApplicationContext(), "You are allowed to set three favourites.",
+                            Toast.LENGTH_LONG).show();
+                else {
+                    Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                    getActivity().startActivityForResult(intent, PICK_CONTACT);
+                }
+            }
+        });
+        return view;
     }
 
 
@@ -136,35 +153,57 @@ public class TwoFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PICK_CONTACT) {
-            if (resultCode == getActivity().RESULT_OK) {
-                Uri contactData = data.getData();
-                String number = "";
-                String name="";
-                Cursor cursor = getActivity().getContentResolver().query(contactData, null, null, null, null);
-                cursor.moveToFirst();
-                String hasPhone = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.Contacts.HAS_PHONE_NUMBER));
-                String contactId = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.Contacts._ID));
-                if (hasPhone.equals("1")) {
-                    Cursor phones = getActivity().getContentResolver().query
-                            (ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
-                                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID
-                                            + " = " + contactId, null, null);
-                    while (phones.moveToNext()) {
-                        number = phones.getString(phones.getColumnIndex
-                                (ContactsContract.CommonDataKinds.Phone.NUMBER)).replaceAll("[-() ]", "");
-                        name = phones.getString(phones.getColumnIndex
-                                (ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                if (resultCode == getActivity().RESULT_OK) {
+                    Uri contactData = data.getData();
+                    String number = "";
+                    String name = "";
+                    Cursor cursor = getActivity().getContentResolver().query(contactData, null, null, null, null);
+                    cursor.moveToFirst();
+                    String hasPhone = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+                    String contactId = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.Contacts._ID));
+                    if (hasPhone.equals("1")) {
+                        Cursor phones = getActivity().getContentResolver().query
+                                (ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+                                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID
+                                                + " = " + contactId, null, null);
+                        while (phones.moveToNext()) {
+                            number = phones.getString(phones.getColumnIndex
+                                    (ContactsContract.CommonDataKinds.Phone.NUMBER)).replaceAll("[-() ]", "");
+                            name = phones.getString(phones.getColumnIndex
+                                    (ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                        }
+                        phones.close();
+                        Toast.makeText(getActivity().getApplicationContext(), "Contact Added", Toast.LENGTH_SHORT).show();
+                        Contacts c = new Contacts();
+                        c.setName(name);
+                        c.setNumber(number);
+                        contacts.add(c);
+                        adapter.notifyDataSetChanged();
+                    } else {
+                        Toast.makeText(getActivity().getApplicationContext(), "This contact has no phone number", Toast.LENGTH_SHORT)
+                                .show();
                     }
-                    phones.close();
-                    Toast.makeText(getActivity().getApplicationContext(), name+number, Toast.LENGTH_LONG).show();
-                    //Do something with number
-                } else {
-                    Toast.makeText(getActivity().getApplicationContext(), "This contact has no phone number", Toast.LENGTH_LONG).show();
+                    cursor.close();
                 }
-                cursor.close();
-                t.setText(name+number);
             }
+    }
+
+    @Override
+    public void onStop() {
+        System.out.println("OnStop");
+        SharedPreferences.Editor editor;
+        for(int i=1;i<=contacts.size();i++)
+        {
+            editor= list_contents.edit();
+            editor.putString("name"+i,contacts.get(i-1).getName());
+            editor.commit();
+            editor.putString("num"+i,contacts.get(i-1).getNumber());
+            editor.commit();
         }
+        editor= list_contents.edit();
+        editor.putInt("Number",contacts.size());
+        editor.commit();
+        super.onStop();
     }
 }
 

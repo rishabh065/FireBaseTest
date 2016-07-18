@@ -38,7 +38,7 @@ public class PlacesService {
         try {
             String json = getJSON(urlString);
 
-            System.out.println(json);
+//            System.out.println(json);
             JSONObject object = new JSONObject(json);
             JSONArray array = object.getJSONArray("results");
 
@@ -71,7 +71,7 @@ public class PlacesService {
             urlString.append(Double.toString(latitude));
             urlString.append(",");
             urlString.append(Double.toString(longitude));
-            urlString.append("&radius=1000");
+            urlString.append("&radius=5000");
             urlString.append("&types=hospital");
             urlString.append("&sensor=false&key=" + API_KEY);
 
@@ -95,7 +95,7 @@ public class PlacesService {
             String line;
             while ((line = bufferedReader.readLine()) != null)
             {
-                content.append(line + "\n");
+                content.append(line).append("\n");
             }
 
             bufferedReader.close();

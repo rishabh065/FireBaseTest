@@ -7,14 +7,16 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -27,6 +29,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private LocationManager locationManager;
     private Location loc;
+    static Snackbar s;
+    boolean isInFront;
+    private ProgressDialog dialog1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +42,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        new GetPlaces(MapsActivity.this,
-                "hospital").execute();
     }
-
 
     /**
      * Manipulates the map once available.
@@ -55,12 +57,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        // Add a marker in Delhi and move the camera
+        LatLng delhi = new LatLng(28.6139, 77.2090);
+
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(delhi));
     }
-    private class GetPlaces extends AsyncTask<Void,Void,ArrayList<place>> {
+
+    private class GetPlaces extends AsyncTask<Void, Void, ArrayList<place>> {
 
         private ProgressDialog dialog;
         private Context context;
@@ -77,19 +80,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (dialog.isShowing()) {
                 dialog.dismiss();
             }
-            for (int i = 0; i < result.size(); i++) {
-                mMap.addMarker(new MarkerOptions()
-                        .title(result.get(i).getName())
-                        .position(
-                                new LatLng(result.get(i).getLatitude(), result
-                                        .get(i).getLongitude()))
-                        .snippet(result.get(i).getVicinity()));
+            mMap.addMarker(new MarkerOptions().title("Your Location").
+                    position(new LatLng(loc.getLatitude(), loc.getLongitude()))
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+            try {
+                for (int i = 0; i < result.size(); i++) {
+                    mMap.addMarker(new MarkerOptions()
+                            .title(result.get(i).getName())
+                            .position(
+                                    new LatLng(result.get(i).getLatitude(), result
+                                            .get(i).getLongitude()))
+                            .snippet(result.get(i).getVicinity()));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(new LatLng(result.get(0).getLatitude(), result
-                            .get(0).getLongitude())) // Sets the center of the map to
+                    .target(new LatLng(loc.getLatitude(), loc.getLongitude())) // Sets the center of the map to
                     // Mountain View
-                    .zoom(14) // Sets the zoom
+                    .zoom(13) // Sets the zoom
                     .tilt(30) // Sets the tilt of the camera to 30 degrees
                     .build(); // Creates a CameraPosition from the builder
             mMap.animateCamera(CameraUpdateFactory
@@ -109,20 +118,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         @Override
         protected ArrayList<place> doInBackground(Void... arg0) {
             PlacesService service = new PlacesService("AIzaSyBcKckh-rMxnH0KXmek_MygitkEvBSXpLo");
-            ArrayList<place> findPlaces = (ArrayList<place>) service.findPlaces(loc.getLatitude(), // 28.632808
-                    loc.getLongitude()); // 77.218276
-
-
-            for (int i = 0; i < findPlaces.size(); i++) {
-
-                place placeDetail = findPlaces.get(i);
-                Log.e(TAG, "places : " + placeDetail.getName());
-            }
+            ArrayList<place> findPlaces = (ArrayList<place>) service.findPlaces(loc.getLatitude(), // 28.6475944
+                    loc.getLongitude()); // 77.09326
             return findPlaces;
         }
     }
+
     private void currentLocation() {
-        System.out.println("INside1");
+        System.out.println("Inside1");
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         String provider = locationManager
@@ -131,16 +134,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Location location = locationManager.getLastKnownLocation(provider);
 
         if (location == null) {
-            locationManager.requestLocationUpdates(provider, 0, 0, listener);
-            System.out.println("INside3");
+                locationManager.requestLocationUpdates(provider, 0, 0, listener);
+            s = Snackbar.make(this.findViewById(android.R.id.content), "Location Fetching...", Snackbar.LENGTH_INDEFINITE);
+//            s.show();
+            dialog1 = new ProgressDialog(this);
+            dialog1.setCancelable(false);
+            dialog1.setMessage("Fetching Location..");
+            dialog1.isIndeterminate();
+            dialog1.show();
+            System.out.println("Inside3");
         } else {
-            System.out.println("INside2");
+            System.out.println("Inside2");
             loc = location;
             new GetPlaces(MapsActivity.this,
                     "hospitals").execute();
             Log.e(TAG, "location : " + location);
         }
-
     }
 
     private LocationListener listener = new LocationListener() {
@@ -162,6 +171,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Log.e(TAG, "location update : " + location);
             loc = location;
             locationManager.removeUpdates(listener);
+            if (dialog1.isShowing()) {
+                dialog1.dismiss();
+            }
+            if(isInFront){
+                new GetPlaces(MapsActivity.this,
+                        "hospitals").execute();
+            }
+
         }
     };
+    @Override
+    public void onResume() {
+        super.onResume();
+        isInFront = true;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        isInFront = false;
+    }
 }
+

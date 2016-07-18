@@ -5,4 +5,5 @@
     <string name="search_title">Search</string>
     <string name="layout_toggle">LayoutSelector</string>
     <string name="title_activity_maps">Map</string>
+    <string name="splash_text">Indian Red Cross Society</string>
 </resources>
