@@ -14,7 +14,7 @@
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
-        <item name="android:textColorHint">@color/colorAccent</item>
+        <item name="android:textColorHint">@color/colorPrimary</item>
         <item name="colorControlHighlight">@color/colorRipple</item>
 
     </style>
