@@ -4,4 +4,11 @@
     <string name="title_activity_second">SecondActivity</string>
     <string name="search_title">Search</string>
     <string name="layout_toggle">LayoutSelector</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="splash_text">Indian Red Cross Society</string>
+    <string name="about_stjohn">St. John Ambulance India is the Indian branch of St. John Ambulance, an international organization involved in teaching and practice of medical first aid and the provision of ambulance services. There are two operational wings often called the Association Wing (which delivers first aid training) and the Brigade Wing (which delivers First Aid at public events). St John Ambulance India is made up of over 650 State, Union, railway, regional, district and local centres. The Society is closely associated with the Indian Red Cross Society.
+    More information can be found on following website: http://www.indianredcross.org/StJohnAmbulance.htm .
+    </string>
+    <string name="about_ircs">The Indian Red Cross Society (IRCS) is a voluntary humanitarian organisation to protect human life and health based in India. It is part of the International Red Cross and Red Crescent Movement and shares the Fundamental Principles of the International Red Cross and Red Crescent Movement. The mission of the society is providing relief in times of disasters/emergencies and promoting health and care of vulnerable people and communities. It has a network of over 700 branches throughout India. The Society is closely associated with the St John Ambulance in India.</string>
+    <string name="copyright">Copyright of the application and its content is vested with St John Ambulance India and the Indian Red Cross Society. Reproduction by any means of written, graphical or photographic material appearing in this application for commercial purposes is strictly prohibited unless written permission is granted by the Permission Coordinator of the IRCS/SJA India, 1 Red Cross Road, New Delhi 11001, India.</string>
 </resources>

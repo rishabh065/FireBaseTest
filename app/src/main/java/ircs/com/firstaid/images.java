@@ -1,5 +1,6 @@
 package ircs.com.firstaid;
 
+import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -7,7 +8,7 @@ import android.graphics.Bitmap;
 import android.os.Environment;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
+import android.view.WindowManager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -25,6 +26,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class images extends Service {
+    ProgressDialog dialog;
     ArrayList<String> url_list=new ArrayList<>();
     public images() {
 
@@ -32,10 +34,17 @@ public class images extends Service {
 
     @Override
     public void onCreate() {
+
         super.onCreate();
         Firebase.setAndroidContext(this);
         Firebase ref=new Firebase("https://project-7104573469224225532.firebaseio.com/");
         final Context c=images.this;
+        dialog = new ProgressDialog(c);
+        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY);
+        dialog.setCancelable(false);
+        dialog.setMessage("Fetching Images..");
+        dialog.isIndeterminate();
+        dialog.show();
         ref.addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
@@ -46,7 +55,7 @@ public class images extends Service {
                     final String categoryurl="https://project-7104573469224225532.firebaseio.com/"+data.getKey();
                     final String url="https://project-7104573469224225532.firebaseio.com/"+data.getKey()+"/img";
                     Firebase ref1=new Firebase(url);
-                    ref1.addListenerForSingleValueEvent(new ValueEventListener()
+                    ref1.addValueEventListener(new ValueEventListener()
                     {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -58,13 +67,13 @@ public class images extends Service {
                                 {
                                     final String num=data.getKey();
                                     String imgurl=categoryurl+"/Steps/"+data.getKey();
-                                    System.out.println(imgurl);
+//                                    System.out.println(imgurl);
                                     Firebase ref3=new Firebase(imgurl);
                                     ref3.child("url").addListenerForSingleValueEvent(new ValueEventListener()
                                     {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
-                                            System.out.println(dataSnapshot.getValue());
+//                                            System.out.println(dataSnapshot.getValue());
                                             images.this.url_list.add(dataSnapshot.getValue().toString());
                                             Glide
                                                     .with(getApplicationContext())
@@ -73,7 +82,7 @@ public class images extends Service {
                                                     .into(new SimpleTarget<Bitmap>(Target.SIZE_ORIGINAL,Target.SIZE_ORIGINAL) {
                                                         @Override
                                                         public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
-                                                            storeImage(resource,category+num);
+                                                            storeImage(resource,category+num,category);
                                                         }
                                                     });
 //                                            Toast.makeText(images.this, dataSnapshot.getValue().toString(), Toast.LENGTH_SHORT).show();
@@ -85,7 +94,7 @@ public class images extends Service {
 
                                 }
                             }
-                            System.out.println("mysizeisyo"+url_list.size());
+//                            System.out.println("mysizeisyo"+url_list.size());
                         }
 
                         @Override
@@ -99,12 +108,16 @@ public class images extends Service {
 
             }
         });
-        System.out.println("mysizeis"+url_list.size());
-        Toast.makeText(images.this, "stop", Toast.LENGTH_SHORT).show();
-        stopSelf();
+//        System.out.println("mysizeis"+url_list.size());
+
+        //Toast.makeText(images.this, "stop", Toast.LENGTH_SHORT).show();
+
     }
-    private void storeImage(Bitmap image,String name) {
+    private void storeImage(Bitmap image,String name,String cate) {
         File pictureFile = getOutputMediaFile(name);
+//        System.out.println(cate);
+        if(cate.equals("zzzzzz"))
+            stopService();
         if (pictureFile == null) {
             Log.d("file",
                     "Error creating media file, check storage permissions: ");// e.getMessage());
@@ -132,19 +145,24 @@ public class images extends Service {
         // between applications and persist after your app has been uninstalled.
 
         // Create the storage directory if it does not exist
-        System.out.println("Hello1");
+//        System.out.println("Hello1");
         if (! mediaStorageDir.exists()){
             if (! mediaStorageDir.mkdirs()){
                 return null;
             }
         }
-        System.out.println("Hello");
+//        System.out.println("Hello");
         // Create a media file name
         File mediaFile;
         String mImageName=name+".png";
         mediaFile = new File(mediaStorageDir.getPath() + File.separator + mImageName);
-        System.out.println(mediaFile.getPath());
+//        System.out.println(mediaFile.getPath());
         return mediaFile;
+    }
+    public void stopService()
+    {
+        dialog.dismiss();
+        stopSelf();
     }
 
 

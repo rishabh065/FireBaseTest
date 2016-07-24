@@ -8,9 +8,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        card_view:cardUseCompatPadding="true"
-        android:layout_marginLeft="1dp"
-        android:layout_marginRight="1dp"
+        android:layout_margin="3dp"
+        android:elevation="1dp"
         card_view:cardElevation="2dp"
 
         card_view:cardCornerRadius="@dimen/card_album_radius"

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -80,7 +79,7 @@ public class SecondActivity extends AppCompatActivity {
                 //System.out.println(key);
                 final boolean val=model;
                 final StepHolder sh=viewHold;
-                ref.child("Steps").child(key).addListenerForSingleValueEvent(new ValueEventListener() {
+                ref.child("Steps").child(key).addValueEventListener(new ValueEventListener() {
 
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         String name = dataSnapshot.child("text").getValue(String.class);
@@ -110,7 +109,6 @@ public class SecondActivity extends AppCompatActivity {
         // Enable the Up button
         assert ab != null;
         ab.setDisplayHomeAsUpEnabled(true);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
