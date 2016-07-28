@@ -16,6 +16,7 @@
             android:layout_margin="@dimen/fab_margin"
             android:src="@drawable/call"
             app:backgroundTint="#006a4e"
+            android:onClick="call_emergency"
             android:layout_centerInParent="true"
             />
         <TextView

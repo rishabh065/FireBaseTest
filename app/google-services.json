@@ -8,17 +8,48 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:686447120067:android:c7bd908fb01a1fe3",
+        "mobilesdk_app_id": "1:686447120067:android:95122eeafefa8a81",
         "android_client_info": {
-          "package_name": "bppc.com.firebasetest"
+          "package_name": "org.indianredcross.adminfirstaid"
         }
       },
       "oauth_client": [
         {
-          "client_id": "686447120067-2it6g5qb4cgoac8ri7lkkcnjt12l3t3o.apps.googleusercontent.com",
+          "client_id": "686447120067-u6fkp2f1iml9mjkl128t1rolt9j21gg2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCO23k7WQtQmw-5GVGbbP7frCMfcT_aCJw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:686447120067:android:56fc7bace2026eda",
+        "android_client_info": {
+          "package_name": "org.indianredcross.firstaid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "686447120067-1pmkr9n6id0ge4o7mieah4etgs45h1s2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "bppc.com.firebasetest",
+            "package_name": "org.indianredcross.firstaid",
             "certificate_hash": "C6967201AAAD950F2A3CAEA347941670B6557AC7"
           }
         },
@@ -44,37 +75,6 @@
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:686447120067:android:605b68614fe94b42",
-        "android_client_info": {
-          "package_name": "ircs.com.firstaid"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "686447120067-u6fkp2f1iml9mjkl128t1rolt9j21gg2.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCO23k7WQtQmw-5GVGbbP7frCMfcT_aCJw"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2

@@ -9,12 +9,13 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="org.indianredcross.firstaid.SecondActivity"
-    tools:showIn="@layout/activity_second">
-<!--Recycler view for displaying steps of the various emergencies.-->
+    tools:context="org.indianredcross.firstaid.ThirdActivity"
+    tools:showIn="@layout/activity_third">
+<!--Recycler view to display steps.-->
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/step_disp">
     </android.support.v7.widget.RecyclerView>
+
 </RelativeLayout>
