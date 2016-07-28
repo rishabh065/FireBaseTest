@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ircs.com.firstaid.Fragments.OneFragment">
+    tools:context="org.indianredcross.firstaid.Fragments.OneFragment">
 
     <include layout="@layout/content_first" />
 

@@ -11,4 +11,8 @@
     </string>
     <string name="about_ircs">The Indian Red Cross Society (IRCS) is a voluntary humanitarian organisation to protect human life and health based in India. It is part of the International Red Cross and Red Crescent Movement and shares the Fundamental Principles of the International Red Cross and Red Crescent Movement. The mission of the society is providing relief in times of disasters/emergencies and promoting health and care of vulnerable people and communities. It has a network of over 700 branches throughout India. The Society is closely associated with the St John Ambulance in India.</string>
     <string name="copyright">Copyright of the application and its content is vested with St John Ambulance India and the Indian Red Cross Society. Reproduction by any means of written, graphical or photographic material appearing in this application for commercial purposes is strictly prohibited unless written permission is granted by the Permission Coordinator of the IRCS/SJA India, 1 Red Cross Road, New Delhi 11001, India.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_third">ThirdActivity</string>
 </resources>

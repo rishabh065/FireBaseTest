@@ -3,6 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp">
+    <!--Developers name and about us.-->
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
@@ -48,7 +49,7 @@
             android:gravity="fill_horizontal"
             android:layout_marginLeft="5dp"/>
         </LinearLayout>
-</android.support.v7.widget.CardView>
+    </android.support.v7.widget.CardView>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
