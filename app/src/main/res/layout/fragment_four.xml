@@ -92,6 +92,25 @@
                 android:textColorLink="#3f51b5"
                 android:autoLink="email|web"
                 android:layout_marginBottom="10dp"/>
+                
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tushar Dhalwani"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold"
+                android:textSize="17sp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="BITS Pilani, Pilani Campus" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="tushardhalwani@gmail.com"
+                android:textColorLink="#3f51b5"
+                android:autoLink="email|web"
+                android:layout_marginBottom="10dp"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -111,24 +130,7 @@
                 android:textColorLink="#3f51b5"
                 android:autoLink="email|web"
                 android:layout_marginBottom="10dp"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Tushar Dhalwani"
-                android:textColor="@color/colorPrimary"
-                android:textStyle="bold"
-                android:textSize="17sp"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="BITS Pilani, Pilani Campus" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="tushardhalwani@gmail.com"
-                android:textColorLink="#3f51b5"
-                android:autoLink="email|web"
-                android:layout_marginBottom="10dp"/>
+       
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
