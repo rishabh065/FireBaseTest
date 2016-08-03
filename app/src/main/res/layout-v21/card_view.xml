@@ -30,6 +30,7 @@
             android:layout_centerHorizontal="true"
             android:textStyle="bold"
             android:id="@+id/category"
+            android:gravity="center_horizontal"
             android:layout_below="@+id/imgView"
             android:textColor="#e8221c"
             android:paddingBottom="2dp"

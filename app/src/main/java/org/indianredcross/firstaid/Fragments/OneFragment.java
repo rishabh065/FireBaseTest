@@ -5,7 +5,12 @@ package org.indianredcross.firstaid.Fragments;
  * Created by Tushar on 03-07-2016.
  */
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -191,8 +196,22 @@ public class OneFragment extends Fragment {
         }
         if(id==R.id.refresh)
         {
-            Intent intent=new Intent(getActivity(),images.class);
-            getActivity().startService(intent);
+            if(isOnline()) {
+                Intent intent=new Intent(getActivity(),images.class);
+                getActivity().startService(intent);
+            }
+            else{
+                AlertDialog.Builder dialog=new AlertDialog.Builder(getActivity());
+                dialog.setTitle("No Internet Connection");
+                dialog.setMessage("Please connect to the Internet to fetch images.");
+                dialog.setCancelable(false);
+                dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int which) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
+            }
         }
 
         return super.onOptionsItemSelected(item);
@@ -248,11 +267,10 @@ public class OneFragment extends Fragment {
         AppIndex.AppIndexApi.end(client, viewAction);
         client.disconnect();
     }
-
-
-
-
-
-
-
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnected();
+    }
 }
