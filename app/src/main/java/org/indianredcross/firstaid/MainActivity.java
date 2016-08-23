@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.multidex.MultiDex;
 import android.support.v4.app.FragmentActivity;
-import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
@@ -31,7 +30,6 @@ public class MainActivity extends FragmentActivity {
         TextView t= (TextView) findViewById(R.id.splash_text);
         Typeface custom_font = Typeface.createFromAsset(getAssets(),  "fonts/league-spartan.bold.ttf");
         t.setTypeface(custom_font);
-        t.setGravity(Gravity.CENTER);
         check=getSharedPreferences(SHARED_PREFS_NAME,0);
         int first=check.getInt("Determine",0);
 //       On first run.
