@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.indianredcross.firstaid">
+    package="org.indianredcross.firstaid" >
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -21,15 +21,15 @@
         android:label="@string/app_name"
         android:screenOrientation="portrait"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name="org.indianredcross.firstaid.MainActivity"
+            android:name=".MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -37,12 +37,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="org.indianredcross.firstaid.FirstActivity"
+            android:name=".FirstActivity"
             android:configChanges="screenSize"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <!--
  ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -52,31 +52,31 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name="org.indianredcross.firstaid.SecondActivity"
+            android:name=".SecondActivity"
             android:label="@string/title_activity_second"
-            android:parentActivityName="org.indianredcross.firstaid.FirstActivity"
+            android:parentActivityName=".FirstActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <service
-            android:name="org.indianredcross.firstaid.images"
+            android:name=".images"
             android:enabled="true" />
         <!-- android:stopWithTask="true" -->
 
         />
         <activity
-            android:name="org.indianredcross.firstaid.MapsActivity"
+            android:name=".MapsActivity"
             android:label="@string/title_activity_maps"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.indianredcross.firstaid.FirstActivity" />
         </activity>
         <activity
-            android:name="org.indianredcross.firstaid.ThirdActivity"
+            android:name=".ThirdActivity"
             android:label="@string/title_activity_third"
-            android:parentActivityName="org.indianredcross.firstaid.FirstActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:parentActivityName=".FirstActivity"
+            android:theme="@style/AppTheme.NoActionBar" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.indianredcross.firstaid.FirstActivity" />

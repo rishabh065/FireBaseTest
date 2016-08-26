@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.WindowManager;
@@ -27,7 +28,7 @@ import java.util.ArrayList;
 
 public class images extends Service {
     ProgressDialog dialog;
-    int count=0;
+    int ca=0;
     ArrayList<String> url_list=new ArrayList<>();
     public images() {
 
@@ -159,7 +160,6 @@ public class images extends Service {
 
                                 }
                             }
-//                            System.out.println("mysizeisyo"+url_list.size());
                         }
 
                         @Override
@@ -173,20 +173,16 @@ public class images extends Service {
 
             }
         });
-
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                stopService();
+            }
+        }, 120000);
 
     }
     private void storeImage(Bitmap image,String name,String cate) {
         File pictureFile = getOutputMediaFile(name);
-        System.out.println(cate);
-        if(cate.equals("zzzzzz")) {
-            if(count==1) {
-                stopService();
-                count=0;
-                System.out.println("now");
-            }
-            else count++;
-        }
         if (pictureFile == null) {
             Log.d("file",
                     "Error creating media file, check storage permissions: ");// e.getMessage());
@@ -201,6 +197,9 @@ public class images extends Service {
         } catch (IOException e) {
             Log.d("file", "Error accessing file: " + e.getMessage());
         }
+        System.out.println(name);
+        ca++;
+        System.out.println(ca);
     }
     private  File getOutputMediaFile(String name){
         // To be safe, you should check that the SDCard is mounted
@@ -223,8 +222,15 @@ public class images extends Service {
 //        System.out.println("Hello");
         // Create a media file name
         File mediaFile;
-        String mImageName=name+".png";
-        mediaFile = new File(mediaStorageDir.getPath() + File.separator + mImageName);
+        try {
+
+            String mImageName = name + ".png";
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator + mImageName);
+        }
+        catch(Exception e)
+        {
+            mediaFile=null;
+        }
 //        System.out.println(mediaFile.getPath());
         return mediaFile;
     }

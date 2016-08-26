@@ -130,10 +130,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //        String provider = locationManager
 //                .getBestProvider(new Criteria(), false);
 
-        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-        if (location == null) {
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, listener);
+//        if (location == null) {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 150000, 1 , listener);
             s = Snackbar.make(this.findViewById(android.R.id.content), "Location Fetching...", Snackbar.LENGTH_INDEFINITE);
 //            s.show();
             dialog1 = new ProgressDialog(this);
@@ -142,13 +142,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             dialog1.isIndeterminate();
             dialog1.show();
             System.out.println("Inside3");
-        } else {
-            System.out.println("Inside2");
-            loc = location;
-            new GetPlaces(MapsActivity.this,
-                    "hospitals").execute();
-            Log.e(TAG, "location : " + location);
-        }
+//        } else {
+//            System.out.println("Inside2");
+//            loc = location;
+//            new GetPlaces(MapsActivity.this,
+//                    "hospitals").execute();
+//            Log.e(TAG, "location : " + location);
+//        }
     }
 
     private LocationListener listener = new LocationListener() {
