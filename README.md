@@ -1,8 +1,8 @@
-# Indian_Red_Cross_Society_First_Aid_App
-First Aid App of the Indian Red Cross Society.
+# First Aid Application of the Indian Red Cross Society
+India's official first aid application.
 
-This android mobile application digitalises a first aid manual prepared by the Indian and Belgian Red Cross Societies. The app
-provides step to be followed in case of emergencies until medical assistance arrives. Application has one tap calling features
+This android mobile application digitizes a first aid manual prepared by the Indian and Belgian Red Cross Societies. The app
+provides steps to be followed in case of emergencies until medical assistance arrives. Application has one tap calling features
 to the national emergency number and to three of the user's favourite contacts. User can also find the medical centres in a 
 radius of 5 kms in the nearby areas.
 
